@@ -28,7 +28,15 @@ let editMode    = false;
 ============================================================ */
 
 const save     = () => localStorage.setItem("products", JSON.stringify(products));
-const icon     = c  => ({ technology:"💻", books:"📚", uniform:"👕", stationery:"✏️", others:"📦" }[c] || "📦");
+// SVG icon set — black/white stroke icons
+const ICONS = {
+  technology: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+  books:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  uniform:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>',
+  stationery: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="4"/><path d="M6 9l6-5 6 5"/><line x1="6" y1="20" x2="18" y2="20"/></svg>',
+  others:     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+};
+const icon = c => ICONS[c] || ICONS.others;
 const lbl      = c  => ({ all:"All Items", mine:"My Items", technology:"Technology", books:"Books", uniform:"Uniform", stationery:"Stationery", others:"Others" }[c] || c);
 const initials = n  => n ? n.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2) : "U";
 const isReal   = img => img && img.startsWith("data:image/") && !img.includes("svg+xml");
@@ -118,7 +126,7 @@ function renderProducts(cat, search) {
           : `<div class="p-banner-icon">${icon(p.category)}</div>`}
         ${p.soldOut ? '<div class="p-sold-badge">SOLD</div>' : ""}
         <div class="p-banner-label">${p.name}</div>
-        ${hasImg ? '<div class="zoom-hint">🔍 Tap to expand</div>' : ""}
+        ${hasImg ? '<div class="zoom-hint"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Tap to expand</div>' : ""}
       </div>
       <div class="p-body">
         <div class="p-name">${p.name}</div>
@@ -489,7 +497,7 @@ document.getElementById("signupForm").addEventListener("submit", function(e) {
   const cpw   = document.getElementById("signupConfirm").value;
 
   if (!email.endsWith("@ue.edu.ph")) {
-    alert(" Only @ue.edu.ph school email addresses are allowed to register.");
+    alert("❌ Only @ue.edu.ph school email addresses are allowed to register.");
     return;
   }
   if (pw !== cpw) { alert("Passwords do not match."); return; }
@@ -517,7 +525,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
   const pw    = document.getElementById("loginPassword").value;
 
   if (!email.endsWith("@ue.edu.ph")) {
-    alert(" Only @ue.edu.ph school email addresses are allowed to sign in.");
+    alert("❌ Only @ue.edu.ph school email addresses are allowed to sign in.");
     return;
   }
 

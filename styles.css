@@ -4,13 +4,14 @@
 ============================================================ */
 
 
+/* ── VARIABLES ─────────────────────────────────────────────── */
 :root {
   --red:        #8b0000;
   --red-mid:    #a52a2a;
   --red-light:  #fff0f0;
   --red-border: #f5d0d0;
   --white:      #ffffff;
-  --bg:         #ffffff;
+  --bg:         #f4f2f1;
   --sidebar-w:  220px;
   --text:       #1a1a1a;
   --muted:      #888;
@@ -277,7 +278,21 @@ body {
   border-radius: 0 3px 3px 0;
 }
 
-.nav-icon { font-size:16px; width:20px; text-align:center; flex-shrink:0; }
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+.nav-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
 
 
 /* ============================================================
@@ -299,12 +314,21 @@ body {
 
 .tb-search { flex:1; max-width:380px; position:relative; }
 
-.tb-search::before {
-  content: "🔍";
+.search-icon {
   position: absolute;
-  left: 13px; top: 50%;
+  left: 13px;
+  top: 50%;
   transform: translateY(-50%);
-  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+.search-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
 }
 
 .tb-search input {
@@ -341,7 +365,8 @@ body {
 .btn-new:hover { background:var(--red-mid); transform:translateY(-1px); }
 
 .tb-icon {
-  width: 36px; height: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 9px;
   border: 1.5px solid var(--border);
   background: #fff;
@@ -349,9 +374,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  color: var(--muted);
+  color: var(--text);
   transition: all .2s;
+}
+.tb-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
 }
 
 .tb-icon:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
@@ -1057,4 +1086,80 @@ body {
   .stats-row        { grid-template-columns: repeat(2, 1fr); }
   .page-body        { padding: 16px; }
   .products-grid    { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+/* ============================================================
+   SVG ICON STYLES  (dynamic card/panel icons)
+============================================================ */
+
+/* Icons inside product card banner (when no image) */
+.p-banner-icon {
+  font-size: 44px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.2));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-banner-icon svg {
+  width: 52px;
+  height: 52px;
+  stroke: rgba(255,255,255,0.9);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25));
+}
+
+/* Icons inside right panel recent list */
+.r-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #333;
+}
+
+.r-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #333;
+  stroke-width: 2;
+}
+
+/* Icons inside profile dropdown items */
+.pd-ico {
+  color: var(--red);
+}
+
+.pd-ico svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--red);
+  stroke-width: 1.8;
+}
+
+/* Zoom hint icon */
+.zoom-hint svg {
+  width: 13px;
+  height: 13px;
+  stroke: #fff;
+  stroke-width: 2.5;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+/* Stat meta icons */
+.stat-meta svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
 }
