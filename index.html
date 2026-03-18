@@ -191,8 +191,10 @@
           <div class="sb-logo-icon" style="width:32px;height:32px;">
             <img src="uelogo.png" alt="UE Logo">
           </div>
-          <span class="tb-mobile-title">Pamilihang Silangan</span>
-       
+          <div class="tb-mobile-title-wrap">
+            <span class="tb-mobile-title">Pamilihang Silangan</span>
+            <span class="tb-mobile-sub">Bili, Benta, Balik-Ulit</span>
+          </div>
         </div>
 
         <!-- Desktop: search bar -->
@@ -206,16 +208,18 @@
           <input type="text" id="searchBar" placeholder="Search items, categories...">
         </div>
 
-        <!-- Mobile: hidden search input (shown when search icon tapped) -->
-        <div class="tb-search-mobile" id="mobileSearchBar">
-          <span class="search-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </span>
-          <input type="text" id="searchBarMobile" placeholder="Search items...">
-          <button class="search-close-btn" id="searchCloseBtn">&#x2715;</button>
+        <!-- Mobile search overlay — full-screen, tap outside to close -->
+        <div class="mobile-search-overlay" id="mobileSearchOverlay">
+          <div class="mobile-search-bar-wrap">
+            <span class="search-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
+            <input type="text" id="searchBarMobile" placeholder="Search items...">
+  
+          </div>
         </div>
 
         <div class="tb-right">
@@ -347,42 +351,33 @@
 
 
     <!-- ============================================================
-         MOBILE BOTTOM NAVIGATION
+         MOBILE BOTTOM NAVIGATION (3 items only: Home, Categories, Profile)
     ============================================================ -->
     <nav class="mobile-nav" id="mobileNav">
+      <!-- Home -->
       <button class="mn-item active" id="mnHome">
+        <span class="mn-icon">
+          <!-- House icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+            <polyline points="9 21 9 12 15 12 15 21"/>
+          </svg>
+        </span>
+        <span class="mn-label">Home</span>
+      </button>
+
+      <!-- Categories — 4-square grid icon -->
+      <button class="mn-item" id="mnCategories">
         <span class="mn-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
           </svg>
         </span>
-        <span class="mn-label">Home</span>
-      </button>
-
-      <button class="mn-item" id="mnCategories">
-        <span class="mn-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </span>
         <span class="mn-label">Categories</span>
       </button>
 
-      <button class="mn-item" id="mnListings">
-        <span class="mn-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-          </svg>
-        </span>
-        <span class="mn-label">Listings</span>
-      </button>
-
+      <!-- Profile -->
       <button class="mn-item" id="mnProfile">
         <span class="mn-icon" style="position:relative;display:inline-flex;align-items:center;justify-content:center;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -448,77 +443,6 @@
       </div>
     </div>
     <div class="sheet-overlay" id="sheetOverlay"></div>
-
-
-    <!-- ============================================================
-         MOBILE LISTINGS SHEET
-    ============================================================ -->
-    <div class="mobile-sheet" id="mobileListSheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">Item Counts</div>
-      <div class="sheet-counts">
-        <div class="count-row">
-          <div class="count-icon red-bg">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Total Listings</div>
-            <div class="count-sub">All active items on campus</div>
-          </div>
-          <div class="count-val" id="lsTotal">0</div>
-        </div>
-        <div class="count-row">
-          <div class="count-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Technology</div>
-            <div class="count-sub">Gadgets, devices, accessories</div>
-          </div>
-          <div class="count-val" id="lsTech">0</div>
-        </div>
-        <div class="count-row">
-          <div class="count-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Books</div>
-            <div class="count-sub">Textbooks, references, notes</div>
-          </div>
-          <div class="count-val" id="lsBooks">0</div>
-        </div>
-        <div class="count-row">
-          <div class="count-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Uniform</div>
-            <div class="count-sub">School uniforms & PE clothes</div>
-          </div>
-          <div class="count-val" id="lsUniform">0</div>
-        </div>
-        <div class="count-row">
-          <div class="count-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="4"/><path d="M6 9l6-5 6 5"/><line x1="6" y1="20" x2="18" y2="20"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Stationery</div>
-            <div class="count-sub">Pens, notebooks, supplies</div>
-          </div>
-          <div class="count-val" id="lsStationery">0</div>
-        </div>
-        <div class="count-row">
-          <div class="count-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-          </div>
-          <div class="count-info">
-            <div class="count-label">Others</div>
-            <div class="count-sub">Miscellaneous items</div>
-          </div>
-          <div class="count-val" id="lsOthers">0</div>
-        </div>
-      </div>
-    </div>
 
 
     <!-- ============================================================
@@ -667,7 +591,7 @@
 
 
 <!-- ============================================================
-     NOTIFICATIONS MODAL
+     NOTIFICATIONS MODAL (with reply)
 ============================================================ -->
 <div class="overlay" id="notifModal">
   <div class="modal-box">
@@ -678,6 +602,33 @@
     <div class="modal-body">
       <div id="notifList"><div class="pd-empty">No notifications yet.</div></div>
       <button class="btn-ms" id="clearNotifBtn" style="width:100%;margin-top:12px;">Clear All</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reply Modal -->
+<div class="overlay" id="replyModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-ttl">Reply</div>
+      <button class="modal-x" id="closeReply">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="reply-context" id="replyContext"></div>
+      <div class="f" style="margin-top:14px;">
+        <label>Your Reply</label>
+        <textarea id="replyMessage" rows="3" placeholder="Type your reply..."></textarea>
+      </div>
+      <div class="m-actions">
+        <button class="btn-mp" id="sendReplyBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Send Reply
+        </button>
+        <button class="btn-ms" id="cancelReply">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

@@ -122,6 +122,74 @@ function markAllRead() {
   updateNotifBadge();
 }
 
+/* ── REPLY MODAL ──────────────────────────────────────────── */
+
+let replyTargetEmail  = null;
+let replyTargetName   = null;
+let replyOriginalMsg  = null;
+
+function openReplyModal(fromEmail, fromName, originalMsg) {
+  replyTargetEmail = fromEmail;
+  replyTargetName  = fromName;
+  replyOriginalMsg = originalMsg;
+
+  $("replyContext").innerHTML = `
+    <div class="reply-context-label">Replying to</div>
+    <div class="reply-context-name">${fromName} <span style="font-size:11px;color:var(--muted);font-weight:400;">(${fromEmail})</span></div>
+    <div class="reply-context-msg">${originalMsg}</div>
+  `;
+  $("replyMessage").value = "";
+
+  $("notifModal").classList.remove("open");
+  $("replyModal").classList.add("open");
+  setTimeout(() => $("replyMessage").focus(), 100);
+}
+
+$("closeReply").addEventListener("click", () => {
+  $("replyModal").classList.remove("open");
+  $("notifModal").classList.add("open");
+});
+
+$("cancelReply").addEventListener("click", () => {
+  $("replyModal").classList.remove("open");
+  $("notifModal").classList.add("open");
+});
+
+$("replyModal").addEventListener("click", e => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove("open");
+    $("notifModal").classList.add("open");
+  }
+});
+
+$("sendReplyBtn").addEventListener("click", () => {
+  const msg = $("replyMessage").value.trim();
+  if (!msg) { alert("Please write a reply first."); return; }
+  if (!replyTargetEmail) return;
+
+  addNotification(replyTargetEmail, {
+    title:    `${currentUser.name} replied to you`,
+    message:  msg,
+    from:     currentUser.email,
+    fromName: currentUser.name,
+  });
+
+  const btn  = $("sendReplyBtn");
+  const orig = btn.innerHTML;
+  btn.innerHTML        = "✓ Reply Sent!";
+  btn.style.background = "#22a55a";
+  setTimeout(() => {
+    btn.innerHTML        = orig;
+    btn.style.background = "";
+    $("replyModal").classList.remove("open");
+    replyTargetEmail = null;
+    replyTargetName  = null;
+    replyOriginalMsg = null;
+  }, 1500);
+});
+
+/* ── RENDER NOTIFICATIONS ─────────────────────────────────── */
+
 function renderNotifList() {
   const list   = $("notifList");
   const notifs = getMyNotifs();
@@ -135,16 +203,48 @@ function renderNotifList() {
   notifs.forEach(n => {
     const div = document.createElement("div");
     div.className = "notif-item" + (n.unread ? " unread" : "");
+
+    // Only show reply button if we know who sent it (has from/fromName)
+    const canReply = n.from && n.fromName && n.from !== currentUser.email;
+
     div.innerHTML = `
       <div class="notif-item-icon">💬</div>
       <div class="notif-item-body">
         <div class="notif-item-title">${n.title || "New Message"}</div>
         <div class="notif-item-msg">${n.message}</div>
         <div class="notif-item-time">${timeAgo(n.time)}</div>
+        ${canReply ? `
+        <div class="notif-item-actions">
+          <button class="btn-notif-reply" data-from="${n.from}" data-fromname="${n.fromName}" data-msg="${encodeURIComponent(n.message)}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+            Reply
+          </button>
+          <button class="btn-notif-email" data-email="${n.from}" data-name="${n.fromName}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </button>
+        </div>` : ""}
       </div>
       ${n.unread ? '<div class="notif-dot"></div>' : ""}
     `;
     list.appendChild(div);
+  });
+
+  // Attach reply button events
+  list.querySelectorAll(".btn-notif-reply").forEach(btn => {
+    btn.addEventListener("click", function () {
+      const fromEmail = this.dataset.from;
+      const fromName  = this.dataset.fromname;
+      const origMsg   = decodeURIComponent(this.dataset.msg);
+      openReplyModal(fromEmail, fromName, origMsg);
+    });
+  });
+
+  // Attach email button events
+  list.querySelectorAll(".btn-notif-email").forEach(btn => {
+    btn.addEventListener("click", function () {
+      window.location.href = `mailto:${this.dataset.email}?subject=Re: Message from Pamilihang Silangan`;
+    });
   });
 }
 
@@ -209,14 +309,6 @@ function stats() {
   set("scUniform",    unifCount);
   set("scStationery", statCount);
   set("scOthers",     othCount);
-
-  // Mobile listings sheet
-  set("lsTotal",      total);
-  set("lsTech",       techCount);
-  set("lsBooks",      bookCount);
-  set("lsUniform",    unifCount);
-  set("lsStationery", statCount);
-  set("lsOthers",     othCount);
 }
 
 
@@ -435,11 +527,11 @@ function renderAll() {
   updateNotifBadge();
 }
 
-// Returns current search value from whichever bar is active
 function getSearchValue() {
-  const mobile = $("searchBarMobile");
-  const desk   = $("searchBar");
-  if (mobile && $("mobileSearchBar").classList.contains("open")) return mobile.value;
+  const overlay = $("mobileSearchOverlay");
+  const mobile  = $("searchBarMobile");
+  const desk    = $("searchBar");
+  if (overlay && overlay.classList.contains("open") && mobile) return mobile.value;
   return desk ? desk.value : "";
 }
 
@@ -464,7 +556,13 @@ function closeLightbox() {
 
 $("lightboxClose").onclick = closeLightbox;
 $("lightbox").addEventListener("click", function (e) { if (e.target === this) closeLightbox(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeLightbox(); closeMobileSheets(); } });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    closeLightbox();
+    closeMobileSheets();
+    closeMobileSearch();
+  }
+});
 
 
 /* ============================================================
@@ -682,32 +780,60 @@ document.querySelectorAll(".stat-card[data-cat-stat]").forEach(card => {
 
 
 /* ============================================================
-   SEARCH — DESKTOP + MOBILE
+   SEARCH — DESKTOP
 ============================================================ */
 
-// Desktop search bar
 $("searchBar").addEventListener("input", function () {
   renderProducts(currentCat, this.value);
 });
 
-// Mobile search icon → show overlay search bar
-$("mobileSearchBtn").addEventListener("click", function () {
-  $("mobileSearchBar").classList.add("open");
-  const input = $("searchBarMobile");
-  input.value = "";
-  setTimeout(() => input.focus(), 50);
-});
 
-// Mobile close button → hide overlay search bar
-$("searchCloseBtn").addEventListener("click", function () {
-  $("mobileSearchBar").classList.remove("open");
+/* ============================================================
+   MOBILE SEARCH — full-screen overlay, tap outside to dismiss
+============================================================ */
+
+function openMobileSearch() {
+  const overlay = $("mobileSearchOverlay");
+  const input   = $("searchBarMobile");
+  overlay.classList.add("open");
+  input.value = "";
+  renderProducts(currentCat, "");
+  setTimeout(() => input.focus(), 80);
+
+  // Prevent clicks inside the bar from closing the overlay
+  document.querySelector(".mobile-search-bar-wrap").addEventListener("click", function(e) {
+    e.stopPropagation();
+  });
+}
+
+function closeMobileSearch() {
+  const overlay = $("mobileSearchOverlay");
+  if (!overlay.classList.contains("open")) return;
+  overlay.classList.remove("open");
   $("searchBarMobile").value = "";
   renderProducts(currentCat, "");
+}
+
+$("mobileSearchBtn").addEventListener("click", openMobileSearch);
+
+// Tap the dark backdrop (outside the bar wrap) → close
+$("mobileSearchOverlay").addEventListener("pointerdown", function (e) {
+  const wrap = document.querySelector(".mobile-search-bar-wrap");
+  if (wrap && !wrap.contains(e.target)) {
+    closeMobileSearch();
+  }
 });
 
-// Mobile search input live filter
+// Live filter while typing
 $("searchBarMobile").addEventListener("input", function () {
   renderProducts(currentCat, this.value);
+});
+
+// Prevent Enter from doing anything unexpected
+$("searchBarMobile").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
 });
 
 
@@ -731,12 +857,11 @@ document.addEventListener("click", e => {
 
 
 /* ============================================================
-   MOBILE BOTTOM NAVIGATION
+   MOBILE BOTTOM NAVIGATION (3 items: Home, Categories, Profile)
 ============================================================ */
 
 function closeMobileSheets() {
   $("mobileCatSheet").classList.remove("open");
-  $("mobileListSheet").classList.remove("open");
   $("mobileProfileSheet").classList.remove("open");
   $("sheetOverlay").classList.remove("open");
 }
@@ -772,13 +897,7 @@ $("mnCategories").addEventListener("click", function () {
   openMobileSheet("mobileCatSheet");
 });
 
-// Listings counts
-$("mnListings").addEventListener("click", function () {
-  setMobileNavActive("mnListings");
-  openMobileSheet("mobileListSheet");
-});
-
-// Profile — hide red dot when opened
+// Profile
 $("mnProfile").addEventListener("click", function () {
   setMobileNavActive("mnProfile");
   renderMobileProfile();
