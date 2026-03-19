@@ -8,10 +8,10 @@
    DATA & STATE
 ============================================================ */
 
-if (localStorage.getItem("ps_version") !== "v8") {
+if (localStorage.getItem("ps_version") !== "v9") {
   localStorage.removeItem("products");
   localStorage.removeItem("notifications");
-  localStorage.setItem("ps_version", "v8");
+  localStorage.setItem("ps_version", "v9");
 }
 
 let products      = JSON.parse(localStorage.getItem("products"))        || [];
@@ -71,9 +71,21 @@ const timeAgo = ts => {
 
 const $ = id => document.getElementById(id);
 
+/* Toggle password visibility */
+function togglePw(inputId, btn) {
+  const input   = $(inputId);
+  const isHidden = input.type === "password";
+  input.type = isHidden ? "text" : "password";
+  btn.querySelector(".eye-show").style.display = isHidden ? "none"  : "";
+  btn.querySelector(".eye-hide").style.display = isHidden ? ""      : "none";
+  btn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+}
+
 
 /* ============================================================
    NOTIFICATIONS SYSTEM
+   — Triggered only when a buyer sends an email to the seller.
+   — No reply feature. View-only in the notifications modal.
 ============================================================ */
 
 function getMyNotifs() {
@@ -81,6 +93,10 @@ function getMyNotifs() {
   return (notifications[currentUser.email] || []).slice().reverse();
 }
 
+/**
+ * Add a notification to a user's inbox.
+ * Called when a buyer clicks "Send Email" in the Contact Seller modal.
+ */
 function addNotification(toEmail, notif) {
   if (!notifications[toEmail]) notifications[toEmail] = [];
   notifications[toEmail].push({
@@ -90,6 +106,7 @@ function addNotification(toEmail, notif) {
     unread: true,
   });
   saveNotif();
+  // Update badge in real-time if the seller is the current user
   if (currentUser && toEmail === currentUser.email) updateNotifBadge();
 }
 
@@ -122,73 +139,8 @@ function markAllRead() {
   updateNotifBadge();
 }
 
-/* ── REPLY MODAL ──────────────────────────────────────────── */
 
-let replyTargetEmail  = null;
-let replyTargetName   = null;
-let replyOriginalMsg  = null;
-
-function openReplyModal(fromEmail, fromName, originalMsg) {
-  replyTargetEmail = fromEmail;
-  replyTargetName  = fromName;
-  replyOriginalMsg = originalMsg;
-
-  $("replyContext").innerHTML = `
-    <div class="reply-context-label">Replying to</div>
-    <div class="reply-context-name">${fromName} <span style="font-size:11px;color:var(--muted);font-weight:400;">(${fromEmail})</span></div>
-    <div class="reply-context-msg">${originalMsg}</div>
-  `;
-  $("replyMessage").value = "";
-
-  $("notifModal").classList.remove("open");
-  $("replyModal").classList.add("open");
-  setTimeout(() => $("replyMessage").focus(), 100);
-}
-
-$("closeReply").addEventListener("click", () => {
-  $("replyModal").classList.remove("open");
-  $("notifModal").classList.add("open");
-});
-
-$("cancelReply").addEventListener("click", () => {
-  $("replyModal").classList.remove("open");
-  $("notifModal").classList.add("open");
-});
-
-$("replyModal").addEventListener("click", e => {
-  if (e.target === e.currentTarget) {
-    e.currentTarget.classList.remove("open");
-    $("notifModal").classList.add("open");
-  }
-});
-
-$("sendReplyBtn").addEventListener("click", () => {
-  const msg = $("replyMessage").value.trim();
-  if (!msg) { alert("Please write a reply first."); return; }
-  if (!replyTargetEmail) return;
-
-  addNotification(replyTargetEmail, {
-    title:    `${currentUser.name} replied to you`,
-    message:  msg,
-    from:     currentUser.email,
-    fromName: currentUser.name,
-  });
-
-  const btn  = $("sendReplyBtn");
-  const orig = btn.innerHTML;
-  btn.innerHTML        = "✓ Reply Sent!";
-  btn.style.background = "#22a55a";
-  setTimeout(() => {
-    btn.innerHTML        = orig;
-    btn.style.background = "";
-    $("replyModal").classList.remove("open");
-    replyTargetEmail = null;
-    replyTargetName  = null;
-    replyOriginalMsg = null;
-  }, 1500);
-});
-
-/* ── RENDER NOTIFICATIONS ─────────────────────────────────── */
+/* ── RENDER NOTIFICATIONS (view-only, no reply) ───────────── */
 
 function renderNotifList() {
   const list   = $("notifList");
@@ -204,47 +156,16 @@ function renderNotifList() {
     const div = document.createElement("div");
     div.className = "notif-item" + (n.unread ? " unread" : "");
 
-    // Only show reply button if we know who sent it (has from/fromName)
-    const canReply = n.from && n.fromName && n.from !== currentUser.email;
-
     div.innerHTML = `
-      <div class="notif-item-icon">💬</div>
+      <div class="notif-item-icon">✉️</div>
       <div class="notif-item-body">
         <div class="notif-item-title">${n.title || "New Message"}</div>
         <div class="notif-item-msg">${n.message}</div>
         <div class="notif-item-time">${timeAgo(n.time)}</div>
-        ${canReply ? `
-        <div class="notif-item-actions">
-          <button class="btn-notif-reply" data-from="${n.from}" data-fromname="${n.fromName}" data-msg="${encodeURIComponent(n.message)}">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
-            Reply
-          </button>
-          <button class="btn-notif-email" data-email="${n.from}" data-name="${n.fromName}">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Email
-          </button>
-        </div>` : ""}
       </div>
       ${n.unread ? '<div class="notif-dot"></div>' : ""}
     `;
     list.appendChild(div);
-  });
-
-  // Attach reply button events
-  list.querySelectorAll(".btn-notif-reply").forEach(btn => {
-    btn.addEventListener("click", function () {
-      const fromEmail = this.dataset.from;
-      const fromName  = this.dataset.fromname;
-      const origMsg   = decodeURIComponent(this.dataset.msg);
-      openReplyModal(fromEmail, fromName, origMsg);
-    });
-  });
-
-  // Attach email button events
-  list.querySelectorAll(".btn-notif-email").forEach(btn => {
-    btn.addEventListener("click", function () {
-      window.location.href = `mailto:${this.dataset.email}?subject=Re: Message from Pamilihang Silangan`;
-    });
   });
 }
 
@@ -295,14 +216,12 @@ function stats() {
 
   const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
 
-  // Desktop stat cards
   set("sTotal",    total);
   set("sTech",     techCount);
   set("sBooks",    bookCount);
   set("sUniform",  unifCount);
   set("sOthers",   statCount + othCount);
 
-  // Mobile category sheet
   set("scAll",        total);
   set("scTech",       techCount);
   set("scBooks",      bookCount);
@@ -380,9 +299,14 @@ function renderProducts(cat, search) {
         <div class="p-price">₱${p.price.toLocaleString()}</div>
         <div class="p-loc">${p.location}</div>
         ${myBtns}
-        <button class="btn-contact" onclick="openContact(${p.id})" ${p.soldOut ? "disabled" : ""}>
-          ${p.soldOut ? "Sold Out" : "Contact Seller"}
-        </button>
+        ${p.email !== currentUser.email
+          ? `<button class="btn-contact" onclick="openContact(${p.id})" ${p.soldOut ? "disabled" : ""}>
+               ${p.soldOut ? "Sold Out" : "Contact Seller"}
+             </button>`
+          : p.soldOut
+            ? `<button class="btn-contact" disabled>Sold Out</button>`
+            : ""
+        }
       </div>
     `;
     grid.appendChild(card);
@@ -566,7 +490,9 @@ document.addEventListener("keydown", e => {
 
 
 /* ============================================================
-   CONTACT SELLER MODAL — in-app notification
+   CONTACT SELLER MODAL
+   — "Send Email" opens the mail client AND fires a red-dot
+     notification to the seller so they know someone emailed.
 ============================================================ */
 
 let contactProductId = null;
@@ -583,41 +509,31 @@ function openContact(id) {
   $("contactMessage").value = `Hi ${p.seller}! I'm interested in your "${p.name}" for ₱${p.price.toLocaleString()}. Is it still available?`;
 
   $("emailBtn").onclick = () => {
-    const msg = $("contactMessage").value;
-    window.location.href = `mailto:${p.email}?subject=Interested in ${encodeURIComponent(p.name)}&body=${encodeURIComponent(msg)}`;
+    const p2  = products.find(x => x.id === contactProductId);
+    if (!p2) return;
+
+    const msg = $("contactMessage").value.trim();
+
+    // Open native mail client
+    window.location.href = `mailto:${p2.email}?subject=Interested in ${encodeURIComponent(p2.name)}&body=${encodeURIComponent(msg)}`;
+
+    // Fire an in-app notification to the seller (red dot)
+    if (p2.email !== currentUser.email) {
+      addNotification(p2.email, {
+        title:    `${currentUser.name} emailed you about "${p2.name}"`,
+        message:  msg || `${currentUser.name} is interested in your item.`,
+        from:     currentUser.email,
+        fromName: currentUser.name,
+        itemId:   p2.id,
+        itemName: p2.name,
+      });
+    }
+
+    $("contactModal").classList.remove("open");
   };
 
   $("contactModal").classList.add("open");
 }
-
-$("sendNotifBtn").addEventListener("click", function () {
-  const p = products.find(x => x.id === contactProductId);
-  if (!p) return;
-
-  if (p.email === currentUser.email) { alert("That's your own listing!"); return; }
-
-  const msg = $("contactMessage").value.trim();
-  if (!msg) { alert("Please write a message first."); return; }
-
-  addNotification(p.email, {
-    title:    `${currentUser.name} is interested in "${p.name}"`,
-    message:  msg,
-    from:     currentUser.email,
-    fromName: currentUser.name,
-    itemId:   p.id,
-    itemName: p.name,
-  });
-
-  const btn  = $("sendNotifBtn");
-  const orig = btn.innerHTML;
-  btn.innerHTML         = "✓ Notification Sent!";
-  btn.style.background  = "#22a55a";
-  setTimeout(() => {
-    btn.innerHTML        = orig;
-    btn.style.background = "";
-    $("contactModal").classList.remove("open");
-  }, 1800);
-});
 
 $("closeContact").onclick  = () => $("contactModal").classList.remove("open");
 $("closeContact2").onclick = () => $("contactModal").classList.remove("open");
@@ -780,7 +696,7 @@ document.querySelectorAll(".stat-card[data-cat-stat]").forEach(card => {
 
 
 /* ============================================================
-   SEARCH — DESKTOP
+   SEARCH — DESKTOP (live filter)
 ============================================================ */
 
 $("searchBar").addEventListener("input", function () {
@@ -789,7 +705,10 @@ $("searchBar").addEventListener("input", function () {
 
 
 /* ============================================================
-   MOBILE SEARCH — full-screen overlay, tap outside to dismiss
+   MOBILE SEARCH
+   — Tap search icon → overlay with input pill + "Search" button
+   — Tap Search → close overlay, return to dashboard, apply filter
+   — Pressing Enter behaves the same as tapping Search
 ============================================================ */
 
 function openMobileSearch() {
@@ -797,42 +716,54 @@ function openMobileSearch() {
   const input   = $("searchBarMobile");
   overlay.classList.add("open");
   input.value = "";
-  renderProducts(currentCat, "");
   setTimeout(() => input.focus(), 80);
 
-  // Prevent clicks inside the bar from closing the overlay
-  document.querySelector(".mobile-search-bar-wrap").addEventListener("click", function(e) {
-    e.stopPropagation();
-  });
+  // Stop clicks inside the bar from closing via backdrop tap
+  document.querySelector(".mobile-search-bar-wrap")
+    .addEventListener("click", e => e.stopPropagation(), { once: false });
 }
 
-function closeMobileSearch() {
+function closeMobileSearch(applySearch) {
   const overlay = $("mobileSearchOverlay");
   if (!overlay.classList.contains("open")) return;
   overlay.classList.remove("open");
-  $("searchBarMobile").value = "";
-  renderProducts(currentCat, "");
+
+  const query = $("searchBarMobile").value.trim();
+
+  if (applySearch && query) {
+    // Go back to dashboard and show results
+    myItems    = false;
+    currentCat = "all";
+    document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+    const allNav = document.querySelector('.nav-item[data-cat="all"]');
+    if (allNav) allNav.classList.add("active");
+    setMobileNavActive("mnHome");
+    renderProducts(currentCat, query);
+  } else {
+    // Clear search — show all items as before
+    $("searchBarMobile").value = "";
+    renderProducts(currentCat, "");
+  }
 }
 
 $("mobileSearchBtn").addEventListener("click", openMobileSearch);
 
-// Tap the dark backdrop (outside the bar wrap) → close
-$("mobileSearchOverlay").addEventListener("pointerdown", function (e) {
-  const wrap = document.querySelector(".mobile-search-bar-wrap");
-  if (wrap && !wrap.contains(e.target)) {
-    closeMobileSearch();
-  }
-});
+// "Search" button inside the pill
+$("mobileSearchSubmit").addEventListener("click", () => closeMobileSearch(true));
 
-// Live filter while typing
-$("searchBarMobile").addEventListener("input", function () {
-  renderProducts(currentCat, this.value);
-});
-
-// Prevent Enter from doing anything unexpected
+// Enter key inside the input
 $("searchBarMobile").addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
+    closeMobileSearch(true);
+  }
+});
+
+// Tap dark backdrop to dismiss without searching
+$("mobileSearchOverlay").addEventListener("pointerdown", function (e) {
+  const wrap = document.querySelector(".mobile-search-bar-wrap");
+  if (wrap && !wrap.contains(e.target)) {
+    closeMobileSearch(false);
   }
 });
 
@@ -857,7 +788,7 @@ document.addEventListener("click", e => {
 
 
 /* ============================================================
-   MOBILE BOTTOM NAVIGATION (3 items: Home, Categories, Profile)
+   MOBILE BOTTOM NAVIGATION
 ============================================================ */
 
 function closeMobileSheets() {

@@ -269,6 +269,40 @@ body {
   transform: translateY(-1px);
 }
 
+/* ── PASSWORD SHOW/HIDE TOGGLE ──────────────────────────────── */
+
+.pw-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pw-wrap input {
+  padding-right: 44px;
+}
+
+.pw-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.pw-eye:hover {
+  color: var(--red);
+  background: var(--red-light);
+}
+
 
 /* ============================================================
    APP SHELL
@@ -495,17 +529,17 @@ body {
   color: #ccc;
 }
 
+
 /* ── MOBILE SEARCH OVERLAY ──────────────────────────────────── */
-/* Full-screen overlay: tap outside the bar to dismiss */
+/* Matches screenshot: search input + "Search" button inline    */
 
 .mobile-search-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.45);
   z-index: 300;
   align-items: flex-start;
-  padding-top: 0;
   backdrop-filter: blur(2px);
 }
 
@@ -513,52 +547,77 @@ body {
   display: flex;
 }
 
+/* White bar at top containing the input + button */
 .mobile-search-bar-wrap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   background: #fff;
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border);
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 
-.mobile-search-bar-wrap .search-icon {
-  position: absolute;
-  left: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 2;
+.mobile-search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 0 6px 0 14px;
+  transition: border-color 0.2s;
+}
+
+.mobile-search-input-row:focus-within {
+  border-color: var(--red);
+  background: #fff;
+}
+
+/* The inline search icon inside the pill */
+.mobile-search-input-row .search-icon {
+  position: static;
+  transform: none;
+  flex-shrink: 0;
   color: var(--muted);
   display: flex;
   align-items: center;
 }
 
-.mobile-search-bar-wrap input {
+.mobile-search-input-row input {
   flex: 1;
-  width: 100%;
-  padding: 10px 16px 10px 38px;
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
+  border: none;
+  background: transparent;
+  padding: 11px 0;
   font-size: 14px;
   font-family: "DM Sans", sans-serif;
-  background: var(--bg);
   color: var(--text);
   outline: none;
-  transition: border-color 0.2s;
 }
 
-.mobile-search-bar-wrap input:focus {
-  border-color: var(--red);
-  background: #fff;
+.mobile-search-input-row input::placeholder {
+  color: #bbb;
 }
 
-.mobile-search-bar-wrap input::placeholder {
-  color: #ccc;
+/* The red "Search" button inside the pill */
+.mobile-search-btn {
+  flex-shrink: 0;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "DM Sans", sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.mobile-search-btn:hover {
+  background: var(--red-mid);
 }
 
 .tb-right {
@@ -1544,7 +1603,7 @@ body {
 
 
 /* ============================================================
-   NOTIFICATIONS LIST (with reply)
+   NOTIFICATIONS LIST (view only — no reply)
 ============================================================ */
 
 .notif-item {
@@ -1601,54 +1660,6 @@ body {
   margin-top: 4px;
 }
 
-.notif-item-actions {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.btn-notif-reply {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: "DM Sans", sans-serif;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-notif-reply:hover {
-  background: var(--red-mid);
-}
-
-.btn-notif-email {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: #fff;
-  color: #555;
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: "DM Sans", sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-notif-email:hover {
-  border-color: #555;
-  background: #f5f5f5;
-}
-
 .notif-dot {
   width: 8px;
   height: 8px;
@@ -1657,38 +1668,6 @@ body {
   position: absolute;
   top: 14px;
   right: 14px;
-}
-
-/* Reply context block */
-.reply-context {
-  background: var(--bg);
-  border-left: 3px solid var(--red);
-  border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  padding: 12px 14px;
-  font-size: 13px;
-}
-
-.reply-context-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-}
-
-.reply-context-name {
-  font-weight: 600;
-  color: var(--text);
-}
-
-.reply-context-msg {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 3px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 
