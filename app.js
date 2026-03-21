@@ -3,13 +3,6 @@
    University of the East Philippines
 ============================================================ */
 
-
-/* Show/hide the auth-page footer */
-function setAuthFooter(visible) {
-  const f = document.getElementById("authFooter");
-  if (f) f.style.display = visible ? "flex" : "none";
-}
-
 /* ============================================================
    DATA & STATE
 ============================================================ */
@@ -38,60 +31,40 @@ const save      = () => localStorage.setItem("products",      JSON.stringify(pro
 const saveNotif = () => localStorage.setItem("notifications", JSON.stringify(notifications));
 
 const ICONS = {
-  technology: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="2" y="3" width="20" height="14" rx="2"/>
-    <line x1="8" y1="21" x2="16" y2="21"/>
-    <line x1="12" y1="17" x2="12" y2="21"/>
-  </svg>`,
-  books: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-  </svg>`,
-  uniform: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
-  </svg>`,
-  stationery: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="12" y1="20" x2="12" y2="4"/>
-    <path d="M6 9l6-5 6 5"/>
-    <line x1="6" y1="20" x2="18" y2="20"/>
-  </svg>`,
-  others: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="21 8 21 21 3 21 3 8"/>
-    <rect x="1" y="3" width="22" height="5"/>
-    <line x1="10" y1="12" x2="14" y2="12"/>
-  </svg>`,
+  technology: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+  books:      `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  uniform:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>`,
+  stationery: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="4"/><path d="M6 9l6-5 6 5"/><line x1="6" y1="20" x2="18" y2="20"/></svg>`,
+  others:     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`,
 };
 
 const icon     = c => ICONS[c] || ICONS.others;
-const lbl      = c => ({ all: "All Items", mine: "My Items", technology: "Technology", books: "Books", uniform: "Uniform", stationery: "Stationery", others: "Others" }[c] || c);
+const lbl      = c => ({ all:"All Items", mine:"My Items", technology:"Technology", books:"Books", uniform:"Uniform", stationery:"Stationery", others:"Others" }[c] || c);
 const initials = n => n ? n.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2) : "U";
 const isReal   = img => img && img.startsWith("data:image/") && !img.includes("svg+xml");
 
 const timeAgo = ts => {
-  const diff = (Date.now() - ts) / 1000;
-  if (diff < 60)    return "just now";
-  if (diff < 3600)  return Math.floor(diff / 60) + "m ago";
-  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
-  return Math.floor(diff / 86400) + "d ago";
+  const d = (Date.now() - ts) / 1000;
+  if (d < 60)    return "just now";
+  if (d < 3600)  return Math.floor(d / 60)   + "m ago";
+  if (d < 86400) return Math.floor(d / 3600)  + "h ago";
+  return Math.floor(d / 86400) + "d ago";
 };
 
 const $ = id => document.getElementById(id);
 
-/* Toggle password visibility */
 function togglePw(inputId, btn) {
-  const input   = $(inputId);
+  const input    = $(inputId);
   const isHidden = input.type === "password";
   input.type = isHidden ? "text" : "password";
-  btn.querySelector(".eye-show").style.display = isHidden ? "none"  : "";
-  btn.querySelector(".eye-hide").style.display = isHidden ? ""      : "none";
+  btn.querySelector(".eye-show").style.display = isHidden ? "none" : "";
+  btn.querySelector(".eye-hide").style.display = isHidden ? ""     : "none";
   btn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
 }
 
 
 /* ============================================================
-   NOTIFICATIONS SYSTEM
-   — Triggered only when a buyer sends an email to the seller.
-   — No reply feature. View-only in the notifications modal.
+   NOTIFICATIONS
 ============================================================ */
 
 function getMyNotifs() {
@@ -99,20 +72,10 @@ function getMyNotifs() {
   return (notifications[currentUser.email] || []).slice().reverse();
 }
 
-/**
- * Add a notification to a user's inbox.
- * Called when a buyer clicks "Send Email" in the Contact Seller modal.
- */
 function addNotification(toEmail, notif) {
   if (!notifications[toEmail]) notifications[toEmail] = [];
-  notifications[toEmail].push({
-    id:     Date.now() + Math.random(),
-    ...notif,
-    time:   Date.now(),
-    unread: true,
-  });
+  notifications[toEmail].push({ id: Date.now() + Math.random(), ...notif, time: Date.now(), unread: true });
   saveNotif();
-  // Update badge in real-time if the seller is the current user
   if (currentUser && toEmail === currentUser.email) updateNotifBadge();
 }
 
@@ -122,19 +85,21 @@ function countUnread() {
 }
 
 function updateNotifBadge() {
-  const count   = countUnread();
-  const badge   = $("notifBadge");
-  const mpCount = $("mpNotifCount");
-  const mnDot   = $("mnNotifDot");
-
+  const count  = countUnread();
+  const badge  = $("notifBadge");
+  const mpCnt  = $("mppNotifCount");
+  const mnDot  = $("mnNotifDot");
+  const mppDot = $("mppNotifDot");
   if (count > 0) {
-    if (badge)   { badge.textContent = count > 9 ? "9+" : count; badge.style.display = "flex"; }
-    if (mpCount) { mpCount.textContent = count; mpCount.style.display = "inline-block"; }
-    if (mnDot)   mnDot.style.display = "block";
+    if (badge)  { badge.textContent = count > 9 ? "9+" : count; badge.style.display = "flex"; }
+    if (mpCnt)  { mpCnt.textContent = count; mpCnt.style.display = "inline-block"; }
+    if (mnDot)  mnDot.style.display = "block";
+    if (mppDot) mppDot.style.display = "block";
   } else {
-    if (badge)   badge.style.display = "none";
-    if (mpCount) mpCount.style.display = "none";
-    if (mnDot)   mnDot.style.display = "none";
+    if (badge)  badge.style.display = "none";
+    if (mpCnt)  mpCnt.style.display = "none";
+    if (mnDot)  mnDot.style.display = "none";
+    if (mppDot) mppDot.style.display = "none";
   }
 }
 
@@ -145,76 +110,52 @@ function markAllRead() {
   updateNotifBadge();
 }
 
-
-/* ── LIKE / ACKNOWLEDGE ───────────────────────────────────── */
-
 function likeNotif(notifId) {
   if (!currentUser) return;
-  const myNotifs = notifications[currentUser.email] || [];
-  const n = myNotifs.find(x => x.id === notifId);
+  const list = notifications[currentUser.email] || [];
+  const n    = list.find(x => x.id === notifId);
   if (!n || n.liked) return;
-
   n.liked = true;
   saveNotif();
-
-  // Send acknowledgement back to the buyer
   if (n.from) {
     addNotification(n.from, {
       title:    currentUser.name + " acknowledged your message",
-      message:  "Your inquiry about \"" + (n.itemName || "the item") + "\" has been seen. The seller liked your message! \uD83D\uDC4D",
+      message:  "Your inquiry about \"" + (n.itemName || "the item") + "\" has been seen. The seller liked your message! 👍",
       from:     currentUser.email,
       fromName: currentUser.name,
       isAck:    true,
     });
   }
-
   renderNotifList();
 }
-
-/* ── RENDER NOTIFICATIONS ─────────────────────────────────── */
 
 function renderNotifList() {
   const list   = $("notifList");
   const notifs = getMyNotifs();
-
-  if (!notifs.length) {
-    list.innerHTML = '<div class="pd-empty">No notifications yet.</div>';
-    return;
-  }
-
+  if (!notifs.length) { list.innerHTML = '<div class="pd-empty">No notifications yet.</div>'; return; }
   list.innerHTML = "";
-  notifs.forEach(function(n) {
-    const div = document.createElement("div");
-    div.className = "notif-item" + (n.unread ? " unread" : "");
-
+  notifs.forEach(n => {
+    const div      = document.createElement("div");
+    div.className  = "notif-item" + (n.unread ? " unread" : "");
     const showLike = n.from && !n.isAck;
     const liked    = !!n.liked;
-
-    const likeBtn = showLike
-      ? '<button class="btn-notif-like' + (liked ? " liked" : "") + '" onclick="likeNotif(' + n.id + ')" ' + (liked ? "disabled" : "") + ' title="' + (liked ? "Acknowledged" : "Acknowledge buyer") + '">' +
-        '<svg width="13" height="13" viewBox="0 0 24 24" fill="' + (liked ? "currentColor" : "none") + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>' +
-        (liked ? "Acknowledged" : "Acknowledge") +
-        '</button>'
+    const likeBtn  = showLike
+      ? `<button class="btn-notif-like${liked ? " liked" : ""}" onclick="likeNotif(${n.id})" ${liked ? "disabled" : ""}>
+           <svg width="13" height="13" viewBox="0 0 24 24" fill="${liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+           ${liked ? "Acknowledged" : "Acknowledge"}
+         </button>`
       : "";
-
-    // ── FIX: use a clean white SVG checkmark for ack notifications
-    //         instead of the ✅ emoji (which has a built-in green circle)
     const notifIcon = n.isAck
-      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-      : "\u2709\uFE0F";
-
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+      : "✉️";
     div.innerHTML =
-      '<div class="notif-item-icon">' + notifIcon + "</div>" +
-      '<div class="notif-item-body">' +
-        '<div class="notif-item-title">' + (n.title || "New Message") + "</div>" +
-        '<div class="notif-item-msg">' + n.message + "</div>" +
-        '<div class="notif-item-footer">' +
-          '<span class="notif-item-time">' + timeAgo(n.time) + "</span>" +
-          likeBtn +
-        "</div>" +
-      "</div>" +
-      (n.unread ? '<div class="notif-dot"></div>' : "");
-
+      `<div class="notif-item-icon">${notifIcon}</div>` +
+      `<div class="notif-item-body">` +
+        `<div class="notif-item-title">${n.title || "New Message"}</div>` +
+        `<div class="notif-item-msg">${n.message}</div>` +
+        `<div class="notif-item-footer"><span class="notif-item-time">${timeAgo(n.time)}</span>${likeBtn}</div>` +
+      `</div>` +
+      (n.unread ? `<div class="notif-dot"></div>` : "");
     list.appendChild(div);
   });
 }
@@ -231,14 +172,12 @@ $("notifModal").addEventListener("click", e => { if (e.target === e.currentTarge
 $("clearNotifBtn").addEventListener("click", () => {
   if (!currentUser) return;
   notifications[currentUser.email] = [];
-  saveNotif();
-  updateNotifBadge();
-  renderNotifList();
+  saveNotif(); updateNotifBadge(); renderNotifList();
 });
 
 
 /* ============================================================
-   SOLD ITEM EXPIRY (auto-remove after 24 h)
+   SOLD ITEM EXPIRY
 ============================================================ */
 
 function expiry() {
@@ -247,7 +186,6 @@ function expiry() {
   products = products.filter(p => !(p.soldOut && p.soldOutTime && (now - p.soldOutTime) / 3600000 >= 24));
   if (products.length < before) { save(); renderAll(); }
 }
-
 setInterval(expiry, 60000);
 
 
@@ -256,28 +194,19 @@ setInterval(expiry, 60000);
 ============================================================ */
 
 function stats() {
-  const v         = products.filter(p => !p.soldOut);
-  const total     = v.length;
-  const techCount = v.filter(p => p.category === "technology").length;
-  const bookCount = v.filter(p => p.category === "books").length;
-  const unifCount = v.filter(p => p.category === "uniform").length;
-  const statCount = v.filter(p => p.category === "stationery").length;
-  const othCount  = v.filter(p => p.category === "others").length;
-
+  const v   = products.filter(p => !p.soldOut);
   const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
-
-  set("sTotal",    total);
-  set("sTech",     techCount);
-  set("sBooks",    bookCount);
-  set("sUniform",  unifCount);
-  set("sOthers",   statCount + othCount);
-
-  set("scAll",        total);
-  set("scTech",       techCount);
-  set("scBooks",      bookCount);
-  set("scUniform",    unifCount);
-  set("scStationery", statCount);
-  set("scOthers",     othCount);
+  set("sTotal",       v.length);
+  set("sTech",        v.filter(p => p.category === "technology").length);
+  set("sBooks",       v.filter(p => p.category === "books").length);
+  set("sUniform",     v.filter(p => p.category === "uniform").length);
+  set("sOthers",      v.filter(p => p.category === "stationery" || p.category === "others").length);
+  set("scAll",        v.length);
+  set("scTech",       v.filter(p => p.category === "technology").length);
+  set("scBooks",      v.filter(p => p.category === "books").length);
+  set("scUniform",    v.filter(p => p.category === "uniform").length);
+  set("scStationery", v.filter(p => p.category === "stationery").length);
+  set("scOthers",     v.filter(p => p.category === "others").length);
 }
 
 
@@ -286,10 +215,9 @@ function stats() {
 ============================================================ */
 
 function renderProducts(cat, search) {
-  search = (search || "").toLowerCase();
-  const grid = $("productsGrid");
-
-  const list = products.filter(p => {
+  search       = (search || "").toLowerCase();
+  const grid   = $("productsGrid");
+  const list   = products.filter(p => {
     const matchCat    = myItems ? p.email === currentUser.email : (cat === "all" || p.category === cat);
     const matchSearch = !search || p.name.toLowerCase().includes(search) || (p.description || "").toLowerCase().includes(search);
     return matchCat && matchSearch;
@@ -299,49 +227,29 @@ function renderProducts(cat, search) {
   $("catLabel").textContent  = myItems ? "My Items" : lbl(cat);
 
   if (!list.length) {
-    grid.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📦</div>
-        <h3>No items found</h3>
-        <p>Try a different category or search term.</p>
-      </div>`;
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">📦</div><h3>No items found</h3><p>Try a different category or search term.</p></div>`;
     return;
   }
 
   grid.innerHTML = "";
-
   list.forEach(p => {
     const card   = document.createElement("div");
     card.className = "p-card" + (p.soldOut ? " sold" : "");
     const hasImg = isReal(p.image);
-
     const myBtns = (myItems && p.email === currentUser.email)
       ? `<div class="p-my-btns">
-           ${!p.soldOut
-             ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation()">Edit</button>
-                <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation()">Mark Sold</button>`
-             : ""}
+           ${!p.soldOut ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation()">Edit</button>
+           <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation()">Mark Sold</button>` : ""}
            <button class="xs xs-del" onclick="delItem(${p.id});event.stopPropagation()">Delete</button>
          </div>`
       : "";
 
     card.innerHTML = `
-      <div class="p-banner${hasImg ? " clickable" : ""}"
-        ${hasImg ? `onclick="openLightbox(${p.id});event.stopPropagation();"` : ""}>
-        ${hasImg
-          ? `<img src="${p.image}" alt="${p.name}">`
-          : `<div class="p-banner-icon">${icon(p.category)}</div>`}
-        ${p.soldOut ? '<div class="p-sold-badge">SOLD</div>' : ""}
+      <div class="p-banner${hasImg ? " clickable" : ""}" ${hasImg ? `onclick="openLightbox(${p.id});event.stopPropagation();"` : ""}>
+        ${hasImg ? `<img src="${p.image}" alt="${p.name}">` : `<div class="p-banner-icon">${icon(p.category)}</div>`}
+        ${p.soldOut ? `<div class="p-sold-badge">SOLD</div>` : ""}
         <div class="p-banner-label">${p.name}</div>
-        ${hasImg
-          ? `<div class="zoom-hint">
-               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                 <circle cx="11" cy="11" r="8"/>
-                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-               </svg>
-               Tap to expand
-             </div>`
-          : ""}
+        ${hasImg ? `<div class="zoom-hint"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Tap to expand</div>` : ""}
       </div>
       <div class="p-body">
         <div class="p-name">${p.name}</div>
@@ -350,36 +258,25 @@ function renderProducts(cat, search) {
         <div class="p-loc">${p.location}</div>
         ${myBtns}
         ${p.email !== currentUser.email
-          ? `<button class="btn-contact" onclick="openContact(${p.id})" ${p.soldOut ? "disabled" : ""}>
-               ${p.soldOut ? "Sold Out" : "Contact Seller"}
-             </button>`
-          : p.soldOut
-            ? `<button class="btn-contact" disabled>Sold Out</button>`
-            : ""
-        }
-      </div>
-    `;
+          ? `<button class="btn-contact" onclick="openContact(${p.id})" ${p.soldOut ? "disabled" : ""}>${p.soldOut ? "Sold Out" : "Contact Seller"}</button>`
+          : p.soldOut ? `<button class="btn-contact" disabled>Sold Out</button>` : ""}
+      </div>`;
     grid.appendChild(card);
   });
 }
 
 
 /* ============================================================
-   RECENT LISTINGS (right panel)
+   RECENT LISTINGS
 ============================================================ */
 
 function renderRecent() {
   const el    = $("recentList");
   const avail = products.filter(p => !p.soldOut).slice(0, 6);
-
-  if (!avail.length) {
-    el.innerHTML = '<div class="pd-empty">No listings yet.</div>';
-    return;
-  }
-
+  if (!avail.length) { el.innerHTML = '<div class="pd-empty">No listings yet.</div>'; return; }
   el.innerHTML = "";
   avail.forEach(p => {
-    const d = document.createElement("div");
+    const d     = document.createElement("div");
     d.className = "r-row";
     d.onclick   = () => openContact(p.id);
     d.innerHTML = `
@@ -391,8 +288,7 @@ function renderRecent() {
       <div class="r-right">
         <div class="r-price">₱${p.price.toLocaleString()}</div>
         <div class="r-seller">${p.seller}</div>
-      </div>
-    `;
+      </div>`;
     el.appendChild(d);
   });
 }
@@ -405,84 +301,80 @@ function renderRecent() {
 function renderPD() {
   const el   = $("pdList");
   const mine = products.filter(p => p.email === currentUser.email);
-
-  if (!mine.length) {
-    el.innerHTML = '<div class="pd-empty">You have no listed items yet.</div>';
-    return;
-  }
-
+  if (!mine.length) { el.innerHTML = '<div class="pd-empty">You have no listed items yet.</div>'; return; }
   el.innerHTML = "";
   mine.forEach(p => {
-    const d = document.createElement("div");
+    const d     = document.createElement("div");
     d.className = "pd-item";
     d.innerHTML = `
       <div class="pd-ico">${icon(p.category)}</div>
       <div style="flex:1;min-width:0;">
         <div class="pd-n" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
-        <div class="pd-p">₱${p.price.toLocaleString()} ·
-          <span style="color:${p.soldOut ? "#721c24" : "#22a55a"};font-size:11px;">
-            ${p.soldOut ? "Sold" : "Available"}
-          </span>
-        </div>
+        <div class="pd-p">₱${p.price.toLocaleString()} · <span style="color:${p.soldOut ? "#721c24" : "#22a55a"};font-size:11px;">${p.soldOut ? "Sold" : "Available"}</span></div>
       </div>
       <div class="pd-acts">
-        ${!p.soldOut
-          ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation()">Edit</button>
-             <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation()">Sold</button>`
-          : ""}
+        ${!p.soldOut ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation()">Edit</button>
+        <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation()">Sold</button>` : ""}
         <button class="xs xs-del" onclick="delItem(${p.id});event.stopPropagation()">Del</button>
-      </div>
-    `;
+      </div>`;
     el.appendChild(d);
   });
 }
 
 
 /* ============================================================
-   MOBILE PROFILE SHEET
+   MOBILE PROFILE PAGE
 ============================================================ */
 
-function renderMobileProfile() {
+let mobileProfileOpen = false;
+
+function openMobileProfilePage() {
   if (!currentUser) return;
+  mobileProfileOpen = true;
+  const page = $("mobileProfilePage");
+  const body = $("pageBody");
+  const set  = (id, val) => { const el = $(id); if (el) el.textContent = val; };
+  set("mppAvatar", initials(currentUser.name));
+  set("mppName",   currentUser.name);
+  set("mppEmail",  currentUser.email);
+  set("mppRole",   currentUser.role);
+  const mine  = products.filter(p => p.email === currentUser.email);
+  set("mppListedCount", mine.length);
+  set("mppSoldCount",   mine.filter(p => p.soldOut).length);
+  set("mppAvailCount",  mine.filter(p => !p.soldOut).length);
+  renderMobileProfileItems();
+  page.classList.remove("hidden");
+  body.style.display = "none";
+  setMobileNavActive("mnProfile");
+  updateNotifBadge();
+}
 
-  const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
-  set("mpAvatar", initials(currentUser.name));
-  set("mpName",   currentUser.name);
-  set("mpEmail",  currentUser.email);
-  set("mpRole",   currentUser.role);
+function closeMobileProfilePage() {
+  mobileProfileOpen = false;
+  $("mobileProfilePage").classList.add("hidden");
+  $("pageBody").style.display = "";
+}
 
-  const list = $("mpItemsList");
+function renderMobileProfileItems() {
+  const list = $("mppItemsList");
   if (!list) return;
-
   const mine = products.filter(p => p.email === currentUser.email);
-
-  if (!mine.length) {
-    list.innerHTML = '<div class="pd-empty">No items listed yet.</div>';
-    return;
-  }
-
+  if (!mine.length) { list.innerHTML = '<div class="pd-empty" style="text-align:center;padding:24px;color:#888;">No items listed yet.</div>'; return; }
   list.innerHTML = "";
   mine.forEach(p => {
-    const d = document.createElement("div");
-    d.className = "mp-item-row";
+    const d     = document.createElement("div");
+    d.className = "mpp-item-row";
     d.innerHTML = `
       <div class="pd-ico">${icon(p.category)}</div>
-      <div class="mp-item-info">
-        <div class="mp-item-name">${p.name}</div>
-        <div class="mp-item-price">₱${p.price.toLocaleString()} ·
-          <span style="color:${p.soldOut ? "#721c24" : "#22a55a"}">
-            ${p.soldOut ? "Sold" : "Available"}
-          </span>
-        </div>
+      <div class="mpp-item-info">
+        <div class="mpp-item-name">${p.name}</div>
+        <div class="mpp-item-price">₱${p.price.toLocaleString()} · <span style="color:${p.soldOut ? "#721c24" : "#22a55a"}">${p.soldOut ? "Sold" : "Available"}</span></div>
       </div>
-      <div class="mp-item-acts">
-        ${!p.soldOut
-          ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation();closeMobileSheets();">Edit</button>
-             <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation();">Sold</button>`
-          : ""}
+      <div class="mpp-item-acts">
+        ${!p.soldOut ? `<button class="xs xs-edit" onclick="openEdit(${p.id});event.stopPropagation();">Edit</button>
+        <button class="xs xs-sold" onclick="markSold(${p.id});event.stopPropagation();">Sold</button>` : ""}
         <button class="xs xs-del" onclick="delItem(${p.id});event.stopPropagation();">Del</button>
-      </div>
-    `;
+      </div>`;
     list.appendChild(d);
   });
 }
@@ -497,7 +389,7 @@ function renderAll() {
   renderProducts(currentCat, getSearchValue());
   renderRecent();
   if ($("profileDropdown").classList.contains("open")) renderPD();
-  if ($("mobileProfileSheet").classList.contains("open")) renderMobileProfile();
+  if (mobileProfileOpen) renderMobileProfileItems();
   updateNotifBadge();
 }
 
@@ -529,20 +421,14 @@ function closeLightbox() {
 }
 
 $("lightboxClose").onclick = closeLightbox;
-$("lightbox").addEventListener("click", function (e) { if (e.target === this) closeLightbox(); });
+$("lightbox").addEventListener("click", function(e) { if (e.target === this) closeLightbox(); });
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    closeLightbox();
-    closeMobileSheets();
-    closeMobileSearch();
-  }
+  if (e.key === "Escape") { closeLightbox(); closeMobileSheets(); closeMobileSearch(); }
 });
 
 
 /* ============================================================
    CONTACT SELLER MODAL
-   — "Send Email" opens the mail client AND fires a red-dot
-     notification to the seller so they know someone emailed.
 ============================================================ */
 
 let contactProductId = null;
@@ -550,24 +436,17 @@ let contactProductId = null;
 function openContact(id) {
   const p = products.find(x => x.id === id);
   if (!p || p.soldOut) return;
-
   contactProductId = id;
   $("cName").textContent  = p.seller;
   $("cEmail").textContent = p.email;
   $("cLoc").textContent   = p.location;
   $("cRole").innerHTML    = `<span class="role-b role-${p.role}">${p.role}</span>`;
   $("contactMessage").value = `Hi ${p.seller}! I'm interested in your "${p.name}" for ₱${p.price.toLocaleString()}. Is it still available?`;
-
   $("emailBtn").onclick = () => {
     const p2  = products.find(x => x.id === contactProductId);
     if (!p2) return;
-
     const msg = $("contactMessage").value.trim();
-
-    // Open native mail client
     window.location.href = `mailto:${p2.email}?subject=Interested in ${encodeURIComponent(p2.name)}&body=${encodeURIComponent(msg)}`;
-
-    // Fire an in-app notification to the seller (red dot)
     if (p2.email !== currentUser.email) {
       addNotification(p2.email, {
         title:    `${currentUser.name} emailed you about "${p2.name}"`,
@@ -578,10 +457,8 @@ function openContact(id) {
         itemName: p2.name,
       });
     }
-
     $("contactModal").classList.remove("open");
   };
-
   $("contactModal").classList.add("open");
 }
 
@@ -599,8 +476,8 @@ function openSell() {
   $("sellTitle").textContent  = "New Listing";
   $("sellSubmit").textContent = "List Item";
   $("sellForm").reset();
-  $("editId").value = "";
-  uploadedImg = null;
+  $("editId").value             = "";
+  uploadedImg                   = null;
   $("imgPreview").style.display = "none";
   $("fileLabel").className      = "file-lbl";
   $("fileLabel").textContent    = "📷 Attach Photo";
@@ -610,7 +487,6 @@ function openSell() {
 function openEdit(id) {
   const p = products.find(x => x.id === id);
   if (!p || p.email !== currentUser.email) return;
-
   editMode = true;
   $("sellTitle").textContent  = "Edit Listing";
   $("sellSubmit").textContent = "Update Item";
@@ -621,10 +497,10 @@ function openEdit(id) {
   $("iLoc").value    = p.location;
   $("iDesc").value   = p.description;
   uploadedImg = p.image;
-  $("previewImg").src             = p.image;
-  $("imgPreview").style.display   = "block";
-  $("fileLabel").className        = "file-lbl active";
-  $("fileLabel").textContent      = "✓ Current Photo";
+  $("previewImg").src           = p.image;
+  $("imgPreview").style.display = "block";
+  $("fileLabel").className      = "file-lbl active";
+  $("fileLabel").textContent    = "✓ Current Photo";
   $("profileDropdown").classList.remove("open");
   $("sellModal").classList.add("open");
 }
@@ -633,15 +509,15 @@ $("sellBtn").onclick   = openSell;
 $("closeSell").onclick = () => $("sellModal").classList.remove("open");
 $("sellModal").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("open"); });
 
-$("mpSellBtn").addEventListener("click", () => { closeMobileSheets(); openSell(); });
-$("mpNotifBtn").addEventListener("click", () => { closeMobileSheets(); openNotifModal(); });
+$("mppSellBtn").addEventListener("click", openSell);
+$("mppNotifBtn").addEventListener("click", openNotifModal);
 
-$("iImg").addEventListener("change", function () {
+$("iImg").addEventListener("change", function() {
   const file = this.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    uploadedImg = e.target.result;
+    uploadedImg                   = e.target.result;
     $("previewImg").src           = uploadedImg;
     $("imgPreview").style.display = "block";
     $("fileLabel").className      = "file-lbl active";
@@ -650,23 +526,14 @@ $("iImg").addEventListener("change", function () {
   reader.readAsDataURL(file);
 });
 
-$("sellForm").addEventListener("submit", function (e) {
+$("sellForm").addEventListener("submit", function(e) {
   e.preventDefault();
   if (!uploadedImg) { alert("Please attach a photo."); return; }
-
   if (editMode) {
     const id = parseInt($("editId").value);
     const i  = products.findIndex(x => x.id === id);
     if (i !== -1 && products[i].email === currentUser.email) {
-      products[i] = {
-        ...products[i],
-        name:        $("iName").value,
-        price:       parseFloat($("iPrice").value),
-        category:    $("iCat").value,
-        location:    $("iLoc").value,
-        description: $("iDesc").value,
-        image:       uploadedImg,
-      };
+      products[i] = { ...products[i], name: $("iName").value, price: parseFloat($("iPrice").value), category: $("iCat").value, location: $("iLoc").value, description: $("iDesc").value, image: uploadedImg };
     }
   } else {
     products.unshift({
@@ -684,7 +551,6 @@ $("sellForm").addEventListener("submit", function (e) {
       soldOutTime: null,
     });
   }
-
   save();
   $("sellModal").classList.remove("open");
   renderAll();
@@ -699,30 +565,24 @@ function markSold(id) {
   if (!confirm("Mark as sold? It will auto-remove after 24 hours.")) return;
   const i = products.findIndex(x => x.id === id);
   if (i !== -1 && products[i].email === currentUser.email) {
-    products[i].soldOut     = true;
-    products[i].soldOutTime = Date.now();
-    save();
-    renderAll();
+    products[i].soldOut = true; products[i].soldOutTime = Date.now();
+    save(); renderAll();
   }
 }
 
 function delItem(id) {
   if (!confirm("Delete this listing?")) return;
   const i = products.findIndex(x => x.id === id);
-  if (i !== -1 && products[i].email === currentUser.email) {
-    products.splice(i, 1);
-    save();
-    renderAll();
-  }
+  if (i !== -1 && products[i].email === currentUser.email) { products.splice(i, 1); save(); renderAll(); }
 }
 
 
 /* ============================================================
-   DESKTOP SIDEBAR NAVIGATION
+   DESKTOP SIDEBAR NAV
 ============================================================ */
 
 document.querySelectorAll(".nav-item[data-cat]").forEach(btn => {
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", function() {
     document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
     this.classList.add("active");
     myItems    = this.dataset.cat === "mine";
@@ -731,9 +591,8 @@ document.querySelectorAll(".nav-item[data-cat]").forEach(btn => {
   });
 });
 
-// Stat cards clickable to filter
 document.querySelectorAll(".stat-card[data-cat-stat]").forEach(card => {
-  card.addEventListener("click", function () {
+  card.addEventListener("click", function() {
     currentCat = this.dataset.catStat;
     myItems    = false;
     document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
@@ -744,85 +603,56 @@ document.querySelectorAll(".stat-card[data-cat-stat]").forEach(card => {
   });
 });
 
-
-/* ============================================================
-   SEARCH — DESKTOP (live filter)
-============================================================ */
-
-$("searchBar").addEventListener("input", function () {
-  renderProducts(currentCat, this.value);
-});
+$("sbLogoutBtn").addEventListener("click", logout);
 
 
 /* ============================================================
-   MOBILE SEARCH
-   — Tap search icon → overlay with input pill + "Search" button
-   — Tap Search → close overlay, return to dashboard, apply filter
-   — Pressing Enter behaves the same as tapping Search
+   SEARCH
 ============================================================ */
+
+$("searchBar").addEventListener("input", function() { renderProducts(currentCat, this.value); });
 
 function openMobileSearch() {
-  const overlay = $("mobileSearchOverlay");
-  const input   = $("searchBarMobile");
-  overlay.classList.add("open");
-  input.value = "";
-  setTimeout(() => input.focus(), 80);
-
-  // Stop clicks inside the bar from closing via backdrop tap
-  document.querySelector(".mobile-search-bar-wrap")
-    .addEventListener("click", e => e.stopPropagation(), { once: false });
+  $("mobileSearchOverlay").classList.add("open");
+  $("searchBarMobile").value = "";
+  setTimeout(() => $("searchBarMobile").focus(), 80);
+  document.querySelector(".mobile-search-bar-wrap").addEventListener("click", e => e.stopPropagation(), { once: false });
 }
 
 function closeMobileSearch(applySearch) {
   const overlay = $("mobileSearchOverlay");
   if (!overlay.classList.contains("open")) return;
   overlay.classList.remove("open");
-
   const query = $("searchBarMobile").value.trim();
-
   if (applySearch && query) {
-    // Go back to dashboard and show results
     myItems    = false;
     currentCat = "all";
     document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
     const allNav = document.querySelector('.nav-item[data-cat="all"]');
     if (allNav) allNav.classList.add("active");
+    if (mobileProfileOpen) closeMobileProfilePage();
     setMobileNavActive("mnHome");
     renderProducts(currentCat, query);
   } else {
-    // Clear search — show all items as before
     $("searchBarMobile").value = "";
     renderProducts(currentCat, "");
   }
 }
 
 $("mobileSearchBtn").addEventListener("click", openMobileSearch);
-
-// "Search" button inside the pill
 $("mobileSearchSubmit").addEventListener("click", () => closeMobileSearch(true));
-
-// Enter key inside the input
-$("searchBarMobile").addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    closeMobileSearch(true);
-  }
-});
-
-// Tap dark backdrop to dismiss without searching
-$("mobileSearchOverlay").addEventListener("pointerdown", function (e) {
+$("searchBarMobile").addEventListener("keydown", function(e) { if (e.key === "Enter") { e.preventDefault(); closeMobileSearch(true); } });
+$("mobileSearchOverlay").addEventListener("pointerdown", function(e) {
   const wrap = document.querySelector(".mobile-search-bar-wrap");
-  if (wrap && !wrap.contains(e.target)) {
-    closeMobileSearch(false);
-  }
+  if (wrap && !wrap.contains(e.target)) closeMobileSearch(false);
 });
 
 
 /* ============================================================
-   DESKTOP PROFILE DROPDOWN TOGGLE
+   DESKTOP PROFILE DROPDOWN
 ============================================================ */
 
-$("profileToggle").addEventListener("click", function (e) {
+$("profileToggle").addEventListener("click", function(e) {
   e.stopPropagation();
   const dd = $("profileDropdown");
   dd.classList.toggle("open");
@@ -831,25 +661,22 @@ $("profileToggle").addEventListener("click", function (e) {
 
 document.addEventListener("click", e => {
   const dd = $("profileDropdown");
-  if (!$("profileToggle").contains(e.target) && !dd.contains(e.target)) {
-    dd.classList.remove("open");
-  }
+  if (!$("profileToggle").contains(e.target) && !dd.contains(e.target)) dd.classList.remove("open");
 });
 
 
 /* ============================================================
-   MOBILE BOTTOM NAVIGATION
+   MOBILE BOTTOM NAV
 ============================================================ */
 
 function closeMobileSheets() {
   $("mobileCatSheet").classList.remove("open");
-  $("mobileProfileSheet").classList.remove("open");
   $("sheetOverlay").classList.remove("open");
 }
 
-function openMobileSheet(sheetId) {
+function openMobileSheet(id) {
   closeMobileSheets();
-  $(sheetId).classList.add("open");
+  $(id).classList.add("open");
   $("sheetOverlay").classList.add("open");
 }
 
@@ -860,8 +687,8 @@ function setMobileNavActive(id) {
   $(id).classList.add("active");
 }
 
-// Home
-$("mnHome").addEventListener("click", function () {
+$("mnHome").addEventListener("click", function() {
+  if (mobileProfileOpen) closeMobileProfilePage();
   setMobileNavActive("mnHome");
   myItems    = false;
   currentCat = "all";
@@ -872,88 +699,68 @@ $("mnHome").addEventListener("click", function () {
   closeMobileSheets();
 });
 
-// Categories
-$("mnCategories").addEventListener("click", function () {
+$("mnCategories").addEventListener("click", function() {
+  if (mobileProfileOpen) closeMobileProfilePage();
   setMobileNavActive("mnCategories");
   openMobileSheet("mobileCatSheet");
 });
 
-// Profile
-$("mnProfile").addEventListener("click", function () {
-  setMobileNavActive("mnProfile");
-  renderMobileProfile();
-  openMobileSheet("mobileProfileSheet");
+$("mnProfile").addEventListener("click", function() {
+  if (!mobileProfileOpen) openMobileProfilePage();
   const dot = $("mnNotifDot");
   if (dot) dot.style.display = "none";
 });
 
-// Category sheet items
 document.querySelectorAll(".sheet-cat-item").forEach(btn => {
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", function() {
     currentCat = this.dataset.cat;
     myItems    = false;
-
     document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
     const match = document.querySelector(`.nav-item[data-cat="${currentCat}"]`);
     if (match) match.classList.add("active");
-
     document.querySelectorAll(".sheet-cat-item").forEach(b => b.classList.remove("active"));
     this.classList.add("active");
-
     renderProducts(currentCat, getSearchValue());
     closeMobileSheets();
     setMobileNavActive("mnHome");
   });
 });
 
-// Mobile logout
 $("mobileLogoutBtn").addEventListener("click", logout);
 
 
 /* ============================================================
-   AUTH — @ue.edu.ph ONLY
+   AUTH
 ============================================================ */
 
-$("loginEmail").addEventListener("input", function () {
+$("loginEmail").addEventListener("input", function() {
   const ok = this.value.trim() === "" || this.value.trim().endsWith("@ue.edu.ph");
   $("loginHint").style.display = ok ? "none" : "block";
   this.style.borderColor       = ok ? "" : "#dc3545";
 });
 
-$("signupEmail").addEventListener("input", function () {
+$("signupEmail").addEventListener("input", function() {
   const ok = this.value.trim() === "" || this.value.trim().endsWith("@ue.edu.ph");
   $("signupHint").style.display = ok ? "none" : "block";
   this.style.borderColor        = ok ? "" : "#dc3545";
 });
 
-$("toSignup").onclick = () => {
-  $("loginView").classList.add("hidden");
-  $("signupView").classList.remove("hidden");
-  setAuthFooter(true);
-};
+$("toSignup").onclick = () => { $("loginView").classList.add("hidden"); $("signupView").classList.remove("hidden"); };
+$("toLogin").onclick  = () => { $("signupView").classList.add("hidden"); $("loginView").classList.remove("hidden"); };
 
-$("toLogin").onclick = () => {
-  $("signupView").classList.add("hidden");
-  $("loginView").classList.remove("hidden");
-  setAuthFooter(true);
-};
-
-$("signupForm").addEventListener("submit", function (e) {
+$("signupForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const name  = $("signupName").value.trim();
   const email = $("signupEmail").value.trim();
   const role  = $("signupRole").value;
   const pw    = $("signupPassword").value;
   const cpw   = $("signupConfirm").value;
-
   if (!email.endsWith("@ue.edu.ph")) { alert("Only @ue.edu.ph school email addresses are allowed."); return; }
   if (pw !== cpw)   { alert("Passwords do not match."); return; }
   if (users[email]) { alert("This email is already registered."); return; }
-
   users[email] = { name, email, role, password: pw };
   localStorage.setItem("registeredUsers", JSON.stringify(users));
   $("signupSuccess").style.display = "block";
-
   setTimeout(() => {
     $("signupSuccess").style.display = "none";
     $("signupForm").reset();
@@ -963,13 +770,11 @@ $("signupForm").addEventListener("submit", function (e) {
   }, 1800);
 });
 
-$("loginForm").addEventListener("submit", function (e) {
+$("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const email = $("loginEmail").value.trim();
   const pw    = $("loginPassword").value;
-
   if (!email.endsWith("@ue.edu.ph")) { alert("Only @ue.edu.ph school email addresses are allowed."); return; }
-
   if (users[email] && users[email].password === pw) {
     currentUser = users[email];
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
@@ -985,12 +790,12 @@ $("loginForm").addEventListener("submit", function (e) {
 ============================================================ */
 
 function logout() {
-  currentUser = null;
+  currentUser       = null;
+  mobileProfileOpen = false;
   localStorage.removeItem("currentUser");
   closeMobileSheets();
   $("dashboardView").classList.add("hidden");
   $("loginView").classList.remove("hidden");
-  setAuthFooter(true);
   $("loginEmail").value    = "";
   $("loginPassword").value = "";
 }
@@ -1006,7 +811,6 @@ function showDashboard() {
   $("loginView").classList.add("hidden");
   $("signupView").classList.add("hidden");
   $("dashboardView").classList.remove("hidden");
-  setAuthFooter(false);
 
   const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
   set("avInitials", initials(currentUser.name));
@@ -1022,7 +826,7 @@ function showDashboard() {
 
 
 /* ============================================================
-   INIT — auto-login if session exists
+   INIT — auto-login if session saved
 ============================================================ */
 
 const saved = localStorage.getItem("currentUser");
