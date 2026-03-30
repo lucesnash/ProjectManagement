@@ -14,10 +14,18 @@
      LOGIN VIEW
 ============================================================ -->
 <div id="loginView">
+  
+  <button id="adminPortalIconBtn" class="admin-top-left-btn" title="Admin Portal">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+  </button>
+
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-brand">
-        <div class="auth-brand-icon"><img src="uelogo.png" alt="UE Logo"></div>
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
         <div>
           <div class="auth-brand-name">Pamilihang Silangan</div>
           <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
@@ -28,7 +36,7 @@
       <form id="loginForm">
         <div class="f">
           <label>School Email <span class="req-note">(@ue.edu.ph only)</span></label>
-          <input type="email" id="loginEmail" placeholder="yourname@ue.edu.ph" required>
+          <input type="email" id="loginEmail" placeholder="name@ue.edu.ph" required>
           <div class="auth-hint" id="loginHint">&#9888;&#65039; Only @ue.edu.ph email addresses are allowed.</div>
         </div>
         <div class="f">
@@ -41,9 +49,293 @@
             </button>
           </div>
         </div>
+        <div class="login-forgot-row">
+          <a id="toForgotPassword" class="forgot-link">Forgot password?</a>
+        </div>
         <button type="submit" class="btn-auth">Sign In</button>
       </form>
-      <div class="auth-switch">Don't have an account? <a id="toSignup">Sign Up</a></div>
+      
+      <button class="btn-admin-login" id="toAdminLogin" style="display: none !important;"></button>
+      
+      <div class="auth-switch" style="margin-top: 24px;">Don't have an account? <a id="toSignup">Sign Up</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FORGOT PASSWORD — STEP 1: Enter Email
+============================================================ -->
+<div id="forgotStep1" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
+        <div>
+          <div class="auth-brand-name">Pamilihang Silangan</div>
+          <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
+        </div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="fp-steps">
+        <div class="fp-step active">
+          <div class="fp-step-dot">1</div>
+          <div class="fp-step-label">Email</div>
+        </div>
+        <div class="fp-step-line"></div>
+        <div class="fp-step">
+          <div class="fp-step-dot">2</div>
+          <div class="fp-step-label">Verify</div>
+        </div>
+        <div class="fp-step-line"></div>
+        <div class="fp-step">
+          <div class="fp-step-dot">3</div>
+          <div class="fp-step-label">Reset</div>
+        </div>
+      </div>
+
+      <div class="fp-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <div class="auth-title">Forgot Password?</div>
+      <div class="auth-sub">Enter your registered UE school email and we'll send a verification code.</div>
+
+      <form id="forgotStep1Form">
+        <div class="f">
+          <label>School Email <span class="req-note">(@ue.edu.ph only)</span></label>
+          <input type="email" id="fpEmail" placeholder="yourname@ue.edu.ph" required>
+          <div class="auth-hint" id="fpEmailHint">&#9888;&#65039; Only @ue.edu.ph email addresses are allowed.</div>
+        </div>
+        <div class="fp-error" id="fpStep1Error"></div>
+        <button type="submit" class="btn-auth">Send Verification Code</button>
+      </form>
+      <div class="auth-switch"><a id="fpBackToLogin">&#8592; Back to Sign In</a></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     FORGOT PASSWORD — STEP 2: Enter Code
+============================================================ -->
+<div id="forgotStep2" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-brand-icon"><img src="assets/uelogo.png " alt="UE Logo"></div>
+        <div>
+          <div class="auth-brand-name">Pamilihang Silangan</div>
+          <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
+        </div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="fp-steps">
+        <div class="fp-step done">
+          <div class="fp-step-dot">&#10003;</div>
+          <div class="fp-step-label">Email</div>
+        </div>
+        <div class="fp-step-line active"></div>
+        <div class="fp-step active">
+          <div class="fp-step-dot">2</div>
+          <div class="fp-step-label">Verify</div>
+        </div>
+        <div class="fp-step-line"></div>
+        <div class="fp-step">
+          <div class="fp-step-dot">3</div>
+          <div class="fp-step-label">Reset</div>
+        </div>
+      </div>
+
+      <div class="fp-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="11" width="14" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="auth-title">Check Your Email</div>
+      <div class="auth-sub">We sent a 6-digit code to <strong id="fpEmailDisplay">your email</strong>. Enter it below.</div>
+
+      <!-- Simulated email preview box -->
+      <div class="fp-code-preview" id="fpCodePreview">
+        <div class="fp-code-preview-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Simulated email — your code is:
+        </div>
+        <div class="fp-code-display" id="fpCodeDisplay">------</div>
+        <div class="fp-code-expires" id="fpCodeExpires">Expires in 10:00</div>
+      </div>
+
+      <form id="forgotStep2Form">
+        <div class="f">
+          <label>6-Digit Verification Code</label>
+          <div class="fp-otp-wrap">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="0" inputmode="numeric" pattern="[0-9]">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="1" inputmode="numeric" pattern="[0-9]">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="2" inputmode="numeric" pattern="[0-9]">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="3" inputmode="numeric" pattern="[0-9]">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="4" inputmode="numeric" pattern="[0-9]">
+            <input class="fp-otp-input" type="text" maxlength="1" data-idx="5" inputmode="numeric" pattern="[0-9]">
+          </div>
+        </div>
+        <div class="fp-error" id="fpStep2Error"></div>
+        <button type="submit" class="btn-auth">Verify Code</button>
+      </form>
+
+      <div class="fp-resend-row">
+        Didn't get it? <button type="button" class="fp-resend-btn" id="fpResendBtn">Resend Code</button>
+        <span class="fp-resend-timer" id="fpResendTimer"></span>
+      </div>
+      <div class="auth-switch"><a id="fpBackToStep1">&#8592; Back</a></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     FORGOT PASSWORD — STEP 3: New Password
+============================================================ -->
+<div id="forgotStep3" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
+        <div>
+          <div class="auth-brand-name">Pamilihang Silangan</div>
+          <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
+        </div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="fp-steps">
+        <div class="fp-step done">
+          <div class="fp-step-dot">&#10003;</div>
+          <div class="fp-step-label">Email</div>
+        </div>
+        <div class="fp-step-line active"></div>
+        <div class="fp-step done">
+          <div class="fp-step-dot">&#10003;</div>
+          <div class="fp-step-label">Verify</div>
+        </div>
+        <div class="fp-step-line active"></div>
+        <div class="fp-step active">
+          <div class="fp-step-dot">3</div>
+          <div class="fp-step-label">Reset</div>
+        </div>
+      </div>
+
+      <div class="fp-icon-wrap">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="auth-title">Set New Password</div>
+      <div class="auth-sub">Create a strong new password for your account.</div>
+
+      <form id="forgotStep3Form">
+        <div class="f">
+          <label>New Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="fpNewPassword" placeholder="Min. 6 characters" required minlength="6">
+            <button type="button" class="pw-eye" onclick="togglePw('fpNewPassword',this)" tabindex="-1" aria-label="Show password">
+              <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <!-- Strength meter -->
+          <div class="fp-strength-wrap">
+            <div class="fp-strength-bar">
+              <div class="fp-strength-fill" id="fpStrengthFill"></div>
+            </div>
+            <span class="fp-strength-label" id="fpStrengthLabel"></span>
+          </div>
+        </div>
+        <div class="f">
+          <label>Confirm New Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="fpConfirmPassword" placeholder="Re-enter new password" required>
+            <button type="button" class="pw-eye" onclick="togglePw('fpConfirmPassword',this)" tabindex="-1" aria-label="Show password">
+              <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="fp-error" id="fpStep3Error"></div>
+        <button type="submit" class="btn-auth">Reset Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     FORGOT PASSWORD — SUCCESS
+============================================================ -->
+<div id="forgotSuccess" class="hidden">
+  <div class="auth-wrap">
+    <div class="auth-card" style="text-align:center;">
+      <div class="auth-brand" style="justify-content:center;">
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
+        <div>
+          <div class="auth-brand-name">Pamilihang Silangan</div>
+          <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
+        </div>
+      </div>
+      <div class="fp-success-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="auth-title">Password Reset!</div>
+      <div class="auth-sub" style="margin-bottom:28px;">Your password has been successfully updated. You can now sign in with your new password.</div>
+      <button class="btn-auth" id="fpGoToLogin">Go to Sign In</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     ADMIN LOGIN VIEW
+============================================================ -->
+<div id="adminLoginView" class="hidden">
+  <div class="auth-wrap admin-login-wrap">
+    <div class="auth-card admin-login-card">
+      <div class="admin-login-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Admin Portal
+      </div>
+      <div class="auth-brand" style="margin-bottom:20px;">
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
+        <div>
+          <div class="auth-brand-name">Pamilihang Silangan</div>
+          <div class="auth-brand-sub">Administrator Access</div>
+        </div>
+      </div>
+      <div class="auth-title">Admin Sign In</div>
+      <div class="auth-sub">Enter your admin credentials to continue</div>
+      <form id="adminLoginForm">
+        <div class="f">
+          <label>Username</label>
+          <input type="text" id="adminUsername" placeholder="admin" required autocomplete="off">
+        </div>
+        <div class="f">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+            <button type="button" class="pw-eye" onclick="togglePw('adminPassword',this)" tabindex="-1" aria-label="Show password">
+              <svg class="eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth btn-admin-submit">Sign In as Admin</button>
+      </form>
+      <div class="auth-switch"><a id="backToUserLogin">&#8592; Back to User Login</a></div>
     </div>
   </div>
 </div>
@@ -56,7 +348,7 @@
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-brand">
-        <div class="auth-brand-icon"><img src="uelogo.png" alt="UE Logo"></div>
+        <div class="auth-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
         <div>
           <div class="auth-brand-name">Pamilihang Silangan</div>
           <div class="auth-brand-sub">Bili, Benta, Balik-Ulit</div>
@@ -69,7 +361,7 @@
         <div class="f"><label>Full Name</label><input type="text" id="signupName" placeholder="Juan dela Cruz" required></div>
         <div class="f">
           <label>School Email <span class="req-note">(@ue.edu.ph only)</span></label>
-          <input type="email" id="signupEmail" placeholder="yourname@ue.edu.ph" required>
+          <input type="email" id="signupEmail" placeholder="name@ue.edu.ph" required>
           <div class="auth-hint" id="signupHint">&#9888;&#65039; Only @ue.edu.ph email addresses are allowed.</div>
         </div>
         <div class="f">
@@ -110,196 +402,369 @@
 
 
 <!-- ============================================================
-     DASHBOARD VIEW
+     ADMIN DASHBOARD VIEW
+============================================================ -->
+<div id="adminDashboardView" class="hidden">
+  <div class="admin-shell">
+
+    <aside class="admin-sidebar">
+      <div class="admin-sb-brand">
+        <div class="admin-sb-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
+        <div class="admin-sb-text">
+          <div class="admin-sb-name">Pamilihang Silangan</div>
+          <div class="admin-sb-sub">Admin Panel</div>
+        </div>
+      </div>
+
+      <nav class="admin-sb-nav">
+        <div class="admin-nav-item active" data-tab="overview">
+          <span class="admin-nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </span>
+          <span class="admin-nav-label">Overview</span>
+        </div>
+        <div class="admin-nav-item" data-tab="listings">
+          <span class="admin-nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
+            </svg>
+          </span>
+          <span class="admin-nav-label">All Listings</span>
+        </div>
+        <div class="admin-nav-item" data-tab="sold">
+          <span class="admin-nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span class="admin-nav-label">Sold Items</span>
+        </div>
+        <div class="admin-nav-item" data-tab="users">
+          <span class="admin-nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </span>
+          <span class="admin-nav-label">Registered Users</span>
+        </div>
+        <div class="admin-nav-item" data-tab="categories">
+          <span class="admin-nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </span>
+          <span class="admin-nav-label">By Category</span>
+        </div>
+      </nav>
+
+      <div class="admin-sb-bottom">
+        <button class="admin-logout-btn" id="adminLogoutBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <div class="admin-topbar-title" id="adminPageTitle">Overview</div>
+          <div class="admin-topbar-sub">Pamilihang Silangan · Monitoring Dashboard</div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-badge-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Administrator
+          </div>
+          <!-- Desktop: Refresh button -->
+          <div class="admin-refresh-btn admin-desktop-only" id="adminRefreshBtn" title="Refresh data">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+          </div>
+
+          <!-- Mobile: Logout button -->
+          <div class="admin-mobile-topbar-logout admin-mobile-only" id="adminTopbarLogoutBtn" title="Log out">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- OVERVIEW TAB -->
+      <div class="admin-tab active" id="tab-overview">
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card accent-red">
+            <div class="asc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg></div>
+            <div class="asc-val" id="ov-totalListings">0</div>
+            <div class="asc-lbl">Total Listings</div>
+            <div class="asc-sub">All time posted items</div>
+          </div>
+          <div class="admin-stat-card accent-green">
+            <div class="asc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+            <div class="asc-val" id="ov-activeListings">0</div>
+            <div class="asc-lbl">Active Listings</div>
+            <div class="asc-sub">Currently for sale</div>
+          </div>
+          <div class="admin-stat-card accent-orange">
+            <div class="asc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="asc-val" id="ov-soldItems">0</div>
+            <div class="asc-lbl">Sold Items</div>
+            <div class="asc-sub">Marked as sold</div>
+          </div>
+          <div class="admin-stat-card accent-blue">
+            <div class="asc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="asc-val" id="ov-totalUsers">0</div>
+            <div class="asc-lbl">Registered Users</div>
+            <div class="asc-sub">Total members</div>
+          </div>
+        </div>
+        <div class="admin-two-col">
+          <div class="admin-panel">
+            <div class="admin-panel-title">Listings by Category</div>
+            <div id="adminCatBreakdown"></div>
+          </div>
+          <div class="admin-panel">
+            <div class="admin-panel-title">Recent Activity</div>
+            <div id="adminRecentActivity"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALL LISTINGS TAB -->
+      <div class="admin-tab" id="tab-listings">
+        <div class="admin-panel admin-panel-table">
+          <div class="admin-panel-header">
+            <div class="admin-panel-title">All Marketplace Listings</div>
+            <div class="admin-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="adminSearchListings" placeholder="Search listings...">
+            </div>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table listings-table">
+              <thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Seller</th><th>Location</th><th>Status</th><th>Posted</th></tr></thead>
+              <tbody id="adminListingsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOLD ITEMS TAB -->
+      <div class="admin-tab" id="tab-sold">
+        <div class="admin-panel admin-panel-table">
+          <div class="admin-panel-header">
+            <div class="admin-panel-title">Sold Items</div>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table sold-table">
+              <thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Seller</th><th>Status</th></tr></thead>
+              <tbody id="adminSoldTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS TAB -->
+      <div class="admin-tab" id="tab-users">
+        <div class="admin-panel admin-panel-table">
+          <div class="admin-panel-header">
+            <div class="admin-panel-title">Registered Users</div>
+            <div class="admin-search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="adminSearchUsers" placeholder="Search users...">
+            </div>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table users-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Listed</th><th>Sold</th><th>Action</th></tr></thead>
+              <tbody id="adminUsersTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORIES TAB -->
+      <div class="admin-tab" id="tab-categories">
+        <div class="admin-cats-grid" id="adminCatsGrid"></div>
+      </div>
+
+      <!-- Skeleton loading overlay -->
+      <div class="admin-skeleton-overlay hidden" id="adminSkeletonOverlay">
+        <div class="admin-skeleton-topbar">
+          <div class="skel skel-title"></div>
+          <div class="skel skel-badge"></div>
+        </div>
+        <div class="admin-skeleton-body">
+          <div class="admin-skeleton-cards">
+            <div class="skel-card"><div class="skel skel-icon"></div><div class="skel skel-num"></div><div class="skel skel-lbl"></div></div>
+            <div class="skel-card"><div class="skel skel-icon"></div><div class="skel skel-num"></div><div class="skel skel-lbl"></div></div>
+            <div class="skel-card"><div class="skel skel-icon"></div><div class="skel skel-num"></div><div class="skel skel-lbl"></div></div>
+            <div class="skel-card"><div class="skel skel-icon"></div><div class="skel skel-num"></div><div class="skel skel-lbl"></div></div>
+          </div>
+          <div class="admin-skeleton-panels">
+            <div class="skel-panel"><div class="skel skel-ph"></div><div class="skel skel-row"></div><div class="skel skel-row"></div><div class="skel skel-row skel-row-short"></div></div>
+            <div class="skel-panel"><div class="skel skel-ph"></div><div class="skel skel-row"></div><div class="skel skel-row"></div><div class="skel skel-row skel-row-short"></div></div>
+          </div>
+        </div>
+      </div>
+
+      
+
+      <!-- Admin Mobile Bottom Navigation -->
+      <nav class="admin-mobile-nav" id="adminMobileNav">
+        <button class="admin-mn-item active" data-tab="overview">
+          <span class="admin-mn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+          <span class="admin-mn-label">Overview</span>
+        </button>
+        <button class="admin-mn-item" data-tab="listings">
+          <span class="admin-mn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg></span>
+          <span class="admin-mn-label">Listings</span>
+        </button>
+        <button class="admin-mn-item" data-tab="sold">
+          <span class="admin-mn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="admin-mn-label">Sold</span>
+        </button>
+        <button class="admin-mn-item" data-tab="users">
+          <span class="admin-mn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="admin-mn-label">Users</span>
+        </button>
+        <button class="admin-mn-item" data-tab="categories">
+          <span class="admin-mn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+          <span class="admin-mn-label">Categories</span>
+        </button>
+      </nav>
+
+      <!-- Delete User Confirmation Modal -->
+      <div class="overlay" id="deleteUserModal">
+        <div class="modal-box" style="max-width:420px;">
+          <div class="modal-head">
+            <div class="modal-ttl" style="color:#dc3545;display:flex;align-items:center;gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Delete Account
+            </div>
+            <button class="modal-x" id="closeDeleteUserModal">&#x2715;</button>
+          </div>
+          <div class="modal-body">
+            <div class="delete-user-info" id="deleteUserInfo"></div>
+            <div class="delete-user-warning">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              This will permanently delete the account and remove all their listings. This cannot be undone.
+            </div>
+            <div class="f" style="margin-top:16px;">
+              <label>Reason for deletion</label>
+              <select id="deleteUserReason">
+                <option value="scam">Reported for Scam</option>
+                <option value="fraud">Fraudulent Activity</option>
+                <option value="spam">Spam / Fake Listings</option>
+                <option value="misconduct">Misconduct</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="m-actions" style="margin-top:12px;">
+              <button class="btn-delete-confirm" id="confirmDeleteUserBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+                Confirm Delete
+              </button>
+              <button class="btn-ms" id="cancelDeleteUserBtn">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     USER DASHBOARD VIEW
 ============================================================ -->
 <div id="dashboardView" class="hidden">
   <div class="app" id="appShell">
 
-    <!-- ============================================================
-         SIDEBAR — starts collapsed, expands on hover
-         No profile section. UE logo + branding at top.
-    ============================================================ -->
     <aside class="sidebar" id="sidebar">
-
-      <!-- UE Logo + Branding — always visible at top -->
       <div class="sb-brand">
-        <div class="sb-brand-icon">
-          <img src="uelogo.png" alt="UE Logo">
-        </div>
+        <div class="sb-brand-icon"><img src="assets/uelogo.png" alt="UE Logo"></div>
         <div class="sb-brand-text">
           <div class="sb-brand-name">Pamilihang Silangan</div>
           <div class="sb-brand-sub">Bili, Benta, Balik-Ulit</div>
         </div>
       </div>
-
-      <!-- Nav items -->
       <nav class="sb-nav">
-
         <div class="nav-item active" data-cat="all" title="Dashboard">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-              <polyline points="9 21 9 12 15 12 15 21"/>
-            </svg>
-          </span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span>
           <span class="nav-label">Dashboard</span>
         </div>
-
         <div class="nav-item" data-cat="mine" id="myItemsNav" title="My Items">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-              <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
-            </svg>
-          </span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg></span>
           <span class="nav-label">My Items</span>
         </div>
-
         <div class="sb-divider"><span class="sb-divider-label">Browse</span></div>
+        <div class="nav-item" data-cat="technology" title="Technology"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span><span class="nav-label">Technology</span></div>
+        <div class="nav-item" data-cat="books" title="Books"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Books</span></div>
+        <div class="nav-item" data-cat="uniform" title="Uniform"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></span><span class="nav-label">Uniform</span></div>
 
-        <div class="nav-item" data-cat="technology" title="Technology">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
-          </span>
-          <span class="nav-label">Technology</span>
-        </div>
-
-        <div class="nav-item" data-cat="books" title="Books">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-          </span>
-          <span class="nav-label">Books</span>
-        </div>
-
-        <div class="nav-item" data-cat="uniform" title="Uniform">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
-            </svg>
-          </span>
-          <span class="nav-label">Uniform</span>
-        </div>
-
-        <div class="nav-item" data-cat="stationery" title="Stationery">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="20" x2="12" y2="4"/>
-              <path d="M6 9l6-5 6 5"/>
-              <line x1="6" y1="20" x2="18" y2="20"/>
-            </svg>
-          </span>
-          <span class="nav-label">Stationery</span>
-        </div>
-
-        <div class="nav-item" data-cat="others" title="Others">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="21 8 21 21 3 21 3 8"/>
-              <rect x="1" y="3" width="22" height="5"/>
-              <line x1="10" y1="12" x2="14" y2="12"/>
-            </svg>
-          </span>
-          <span class="nav-label">Others</span>
-        </div>
-
+        <div class="nav-item" data-cat="others" title="Others"><span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span><span class="nav-label">Others</span></div>
       </nav>
-
-      <!-- Bottom: Sign Out only -->
       <div class="sb-bottom">
         <button class="nav-item sb-logout-btn" id="sbLogoutBtn" title="Sign Out">
-          <span class="nav-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-          </span>
+          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
           <span class="nav-label">Sign Out</span>
         </button>
       </div>
-
     </aside>
 
-
-    <!-- MAIN AREA -->
     <div class="main-area" id="mainArea">
-
-      <!-- Topbar -->
       <header class="topbar">
-
-        <!-- Mobile: logo -->
         <div class="tb-mobile-logo">
-          <div class="sb-logo-icon" style="width:32px;height:32px;">
-            <img src="uelogo.png" alt="UE Logo">
-          </div>
+          <div class="sb-logo-icon" style="width:32px;height:32px;"><img src="assets/uelogo.png" alt="UE Logo"></div>
           <div class="tb-mobile-title-wrap">
             <span class="tb-mobile-title">Pamilihang Silangan</span>
             <span class="tb-mobile-sub">Bili, Benta, Balik-Ulit</span>
           </div>
         </div>
-
-        <!-- Desktop: search bar -->
         <div class="tb-search desktop-only">
-          <span class="search-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </span>
+          <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
           <input type="text" id="searchBar" placeholder="Search items, categories...">
         </div>
-
-        <!-- Mobile search overlay -->
         <div class="mobile-search-overlay" id="mobileSearchOverlay">
           <div class="mobile-search-bar-wrap">
             <div class="mobile-search-input-row">
-              <span class="search-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-              </span>
+              <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
               <input type="text" id="searchBarMobile" placeholder="Search items...">
               <button class="mobile-search-btn" id="mobileSearchSubmit">Search</button>
             </div>
           </div>
         </div>
-
         <div class="tb-right">
-          <!-- Desktop -->
-          <button class="btn-new desktop-only" id="sellBtn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:middle;margin-right:5px;">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            New Listing
-          </button>
-          <button class="tb-icon notif-btn desktop-only" id="notifBtn" title="Notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-            </svg>
-            <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
-          </button>
-
-          <!-- Mobile: search icon -->
-          <button class="tb-icon mobile-only" id="mobileSearchBtn" title="Search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-          </button>
-
-          <!-- Desktop: avatar + dropdown -->
+          <button class="btn-new desktop-only" id="sellBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:middle;margin-right:5px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Listing</button>
+          <button class="tb-icon notif-btn desktop-only" id="notifBtn" title="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notif-badge" id="notifBadge" style="display:none;">0</span></button>
+          <button class="tb-icon mobile-only" id="mobileSearchBtn" title="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
           <div style="position:relative;" class="desktop-only">
             <div class="tb-avatar" id="profileToggle">
               <div class="av-circle" id="avInitials">U</div>
-              <div>
-                <div class="av-name" id="avName">User</div>
-                <div class="av-role" id="avRole">Member</div>
-              </div>
+              <div><div class="av-name" id="avName">User</div><div class="av-role" id="avRole">Member</div></div>
             </div>
             <div class="pd" id="profileDropdown">
               <div class="pd-head">
@@ -312,83 +777,32 @@
                 <div id="pdList"><div class="pd-empty">No items listed yet.</div></div>
               </div>
               <div class="pd-foot">
-                <button class="btn-logout" id="logoutBtn">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                  </svg>
-                  Sign Out
-                </button>
+                <button class="btn-logout" id="logoutBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-
-      <!-- Page Body -->
       <div class="page-body" id="pageBody">
-
-        <!-- Stats Row -->
         <div class="stats-row" id="statsRow">
-          <div class="stat-card red">
-            <div class="stat-lbl">Total Listings</div>
-            <div class="stat-val" id="sTotal">0</div>
-            <div class="stat-meta"><span class="pill-up">Active</span>&nbsp;on campus</div>
-          </div>
-          <div class="stat-card" data-cat-stat="technology">
-            <div class="stat-lbl">Technology</div>
-            <div class="stat-val" id="sTech">0</div>
-            <div class="stat-meta">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Items
-            </div>
-          </div>
-          <div class="stat-card" data-cat-stat="books">
-            <div class="stat-lbl">Books</div>
-            <div class="stat-val" id="sBooks">0</div>
-            <div class="stat-meta">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Items
-            </div>
-          </div>
-          <div class="stat-card" data-cat-stat="uniform">
-            <div class="stat-lbl">Uniforms</div>
-            <div class="stat-val" id="sUniform">0</div>
-            <div class="stat-meta">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg> Items
-            </div>
-          </div>
-          <div class="stat-card" data-cat-stat="others">
-            <div class="stat-lbl">Others</div>
-            <div class="stat-val" id="sOthers">0</div>
-            <div class="stat-meta">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> Misc items
-            </div>
-          </div>
+          <div class="stat-card red"><div class="stat-lbl">Total Listings</div><div class="stat-val" id="sTotal">0</div><div class="stat-meta"><span class="pill-up">Active</span>&nbsp;on campus</div></div>
+          <div class="stat-card" data-cat-stat="technology"><div class="stat-lbl">Technology</div><div class="stat-val" id="sTech">0</div><div class="stat-meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Items</div></div>
+          <div class="stat-card" data-cat-stat="books"><div class="stat-lbl">Books</div><div class="stat-val" id="sBooks">0</div><div class="stat-meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Items</div></div>
+          <div class="stat-card" data-cat-stat="uniform"><div class="stat-lbl">Uniforms</div><div class="stat-val" id="sUniform">0</div><div class="stat-meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg> Items</div></div>
+          <div class="stat-card" data-cat-stat="others"><div class="stat-lbl">Others</div><div class="stat-val" id="sOthers">0</div><div class="stat-meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> Misc items</div></div>
         </div>
-
-        <!-- Center Column -->
         <div class="center-col">
           <div class="listings-header">
-            <div>
-              <div class="listings-title">Marketplace Listings</div>
-              <div class="listings-sub">Showing <span id="catLabel">All Items</span></div>
-            </div>
+            <div><div class="listings-title">Marketplace Listings</div><div class="listings-sub">Showing <span id="catLabel">All Items</span></div></div>
             <div class="listings-count" id="itemCount"></div>
           </div>
           <div class="products-grid" id="productsGrid"></div>
         </div>
-
-        <!-- Right Column -->
         <div class="right-col">
-          <div class="panel">
-            <div class="panel-title">Recent Listings</div>
-            <div id="recentList"></div>
-          </div>
+          <div class="panel"><div class="panel-title">Recent Listings</div><div id="recentList"></div></div>
         </div>
-
-      </div><!-- /page-body -->
-
+      </div>
 
       <!-- Mobile Profile Page -->
       <div class="mobile-profile-page hidden" id="mobileProfilePage">
@@ -399,24 +813,8 @@
           <div class="mpp-badge" id="mppRole">Student</div>
         </div>
         <div class="mpp-actions">
-          <button class="mpp-action-btn" id="mppSellBtn">
-            <span class="mpp-action-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </span>
-            <span class="mpp-action-label">New Listing</span>
-          </button>
-          <button class="mpp-action-btn mpp-notif-action" id="mppNotifBtn">
-            <span class="mpp-action-icon" style="position:relative;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              <span class="mpp-notif-dot" id="mppNotifDot"></span>
-            </span>
-            <span class="mpp-action-label">Notifications <span class="mpp-notif-count" id="mppNotifCount" style="display:none;"></span></span>
-          </button>
+          <button class="mpp-action-btn" id="mppSellBtn"><span class="mpp-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="mpp-action-label">New Listing</span></button>
+          <button class="mpp-action-btn mpp-notif-action" id="mppNotifBtn"><span class="mpp-action-icon" style="position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="mpp-notif-dot" id="mppNotifDot"></span></span><span class="mpp-action-label">Notifications <span class="mpp-notif-count" id="mppNotifCount" style="display:none;"></span></span></button>
         </div>
         <div class="mpp-stats">
           <div class="mpp-stat"><div class="mpp-stat-val" id="mppListedCount">0</div><div class="mpp-stat-lbl">Listed</div></div>
@@ -427,132 +825,57 @@
         </div>
         <div class="mpp-section-title">My Listed Items</div>
         <div class="mpp-items-list" id="mppItemsList"><div class="pd-empty">No items listed yet.</div></div>
-        <div class="mpp-logout-wrap">
-          <button class="btn-logout mpp-logout-btn" id="mobileLogoutBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-            Sign Out
-          </button>
-        </div>
+        <div class="mpp-logout-wrap"><button class="btn-logout mpp-logout-btn" id="mobileLogoutBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button></div>
         <div style="height: calc(var(--mobile-nav-h) + 16px);"></div>
       </div>
+    </div>
 
-    </div><!-- /main-area -->
-
-
-    <!-- ============================================================
-         MOBILE BOTTOM NAVIGATION
-    ============================================================ -->
     <nav class="mobile-nav" id="mobileNav">
-      <button class="mn-item active" id="mnHome">
-        <span class="mn-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-            <polyline points="9 21 9 12 15 12 15 21"/>
-          </svg>
-        </span>
-        <span class="mn-label">Home</span>
-      </button>
-      <button class="mn-item" id="mnCategories">
-        <span class="mn-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-          </svg>
-        </span>
-        <span class="mn-label">Categories</span>
-      </button>
-      <button class="mn-item" id="mnProfile">
-        <span class="mn-icon" style="position:relative;display:inline-flex;align-items:center;justify-content:center;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span class="mn-notif-dot" id="mnNotifDot"></span>
-        </span>
-        <span class="mn-label">Profile</span>
-      </button>
+      <button class="mn-item active" id="mnHome"><span class="mn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span><span class="mn-label">Home</span></button>
+      <button class="mn-item" id="mnCategories"><span class="mn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="mn-label">Categories</span></button>
+      <button class="mn-item" id="mnProfile"><span class="mn-icon" style="position:relative;display:inline-flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="mn-notif-dot" id="mnNotifDot"></span></span><span class="mn-label">Profile</span></button>
     </nav>
 
-
-    <!-- Mobile Category Sheet -->
     <div class="mobile-sheet" id="mobileCatSheet">
       <div class="sheet-handle"></div>
       <div class="sheet-title">Browse Categories</div>
       <div class="sheet-cats">
-        <button class="sheet-cat-item" data-cat="all">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
-          <span class="sheet-cat-name">All Items</span>
-          <span class="sheet-cat-count" id="scAll">0</span>
-        </button>
-        <button class="sheet-cat-item" data-cat="technology">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
-          <span class="sheet-cat-name">Technology</span>
-          <span class="sheet-cat-count" id="scTech">0</span>
-        </button>
-        <button class="sheet-cat-item" data-cat="books">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
-          <span class="sheet-cat-name">Books</span>
-          <span class="sheet-cat-count" id="scBooks">0</span>
-        </button>
-        <button class="sheet-cat-item" data-cat="uniform">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></span>
-          <span class="sheet-cat-name">Uniform</span>
-          <span class="sheet-cat-count" id="scUniform">0</span>
-        </button>
-        <button class="sheet-cat-item" data-cat="stationery">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="4"/><path d="M6 9l6-5 6 5"/><line x1="6" y1="20" x2="18" y2="20"/></svg></span>
-          <span class="sheet-cat-name">Stationery</span>
-          <span class="sheet-cat-count" id="scStationery">0</span>
-        </button>
-        <button class="sheet-cat-item" data-cat="others">
-          <span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span>
-          <span class="sheet-cat-name">Others</span>
-          <span class="sheet-cat-count" id="scOthers">0</span>
-        </button>
+        <button class="sheet-cat-item" data-cat="all"><span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="sheet-cat-name">All Items</span><span class="sheet-cat-count" id="scAll">0</span></button>
+        <button class="sheet-cat-item" data-cat="technology"><span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span><span class="sheet-cat-name">Technology</span><span class="sheet-cat-count" id="scTech">0</span></button>
+        <button class="sheet-cat-item" data-cat="books"><span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="sheet-cat-name">Books</span><span class="sheet-cat-count" id="scBooks">0</span></button>
+        <button class="sheet-cat-item" data-cat="uniform"><span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg></span><span class="sheet-cat-name">Uniform</span><span class="sheet-cat-count" id="scUniform">0</span></button>
+        
+        <button class="sheet-cat-item" data-cat="others"><span class="sheet-cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span><span class="sheet-cat-name">Others</span><span class="sheet-cat-count" id="scOthers">0</span></button>
       </div>
     </div>
     <div class="sheet-overlay" id="sheetOverlay"></div>
 
-  </div><!-- /app -->
-</div><!-- /dashboardView -->
+  </div>
+</div>
 
 
-<!-- ============================================================
-     SELL / EDIT MODAL
-============================================================ -->
+<!-- SELL MODAL -->
 <div class="overlay" id="sellModal">
   <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-ttl" id="sellTitle">New Listing</div>
-      <button class="modal-x" id="closeSell">&#x2715;</button>
-    </div>
+    <div class="modal-head"><div class="modal-ttl" id="sellTitle">New Listing</div><button class="modal-x" id="closeSell">&#x2715;</button></div>
     <div class="modal-body">
       <form id="sellForm">
         <input type="hidden" id="editId">
         <div class="f"><label>Item Name</label><input type="text" id="iName" placeholder="e.g. Scientific Calculator" required></div>
         <div class="f"><label>Price (&#8369;)</label><input type="number" id="iPrice" placeholder="e.g. 500" step="0.01" required></div>
-        <div class="f">
-          <label>Category</label>
-          <select id="iCat" required>
-            <option value="">Select category</option>
-            <option value="technology">Technology</option>
-            <option value="books">Books</option>
-            <option value="uniform">Uniform</option>
-            <option value="stationery">Stationery</option>
-            <option value="others">Others</option>
-          </select>
-        </div>
+        <div class="f"><label>Category</label><select id="iCat" required><option value="">Select category</option><option value="technology">Technology</option><option value="books">Books</option><option value="uniform">Uniform</option><option value="others">Others</option></select></div>
         <div class="f"><label>Location on Campus</label><input type="text" id="iLoc" placeholder="e.g. Building A - Room 201" required></div>
         <div class="f"><label>Description</label><textarea id="iDesc" placeholder="Describe condition, specs, etc..." rows="3" required></textarea></div>
         <div class="f">
-          <label>Item Photo</label>
-          <input type="file" id="iImg" accept="image/*" style="display:none;">
-          <label for="iImg" class="file-lbl" id="fileLabel">&#128247; Attach Photo</label>
-          <div class="img-prev" id="imgPreview"><img id="previewImg" src="" alt=""></div>
+          <label>Item Photos</label>
+          <div class="photo-grid-container">
+            <div class="multi-img-prev" id="imgPreviewContainer">
+              <label for="iImg" class="upload-tile" id="fileLabel">
+                <span>+</span>
+                <input type="file" id="iImg" accept="image/*" multiple style="display:none;">
+              </label>
+              </div>
+          </div>
         </div>
         <button type="submit" class="btn-mp" id="sellSubmit" style="width:100%;margin-top:6px;">List Item</button>
       </form>
@@ -560,16 +883,10 @@
   </div>
 </div>
 
-
-<!-- ============================================================
-     CONTACT SELLER MODAL
-============================================================ -->
+<!-- CONTACT MODAL -->
 <div class="overlay" id="contactModal">
   <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-ttl">Contact Seller</div>
-      <button class="modal-x" id="closeContact">&#x2715;</button>
-    </div>
+    <div class="modal-head"><div class="modal-ttl">Contact Seller</div><button class="modal-x" id="closeContact">&#x2715;</button></div>
     <div class="modal-body">
       <div class="seller-block">
         <p><strong>Seller:</strong> <span id="cName"></span><span id="cRole"></span></p>
@@ -578,29 +895,17 @@
       </div>
       <div class="f"><label>Your Message</label><textarea id="contactMessage" rows="3" placeholder="Hi! I'm interested in your item..."></textarea></div>
       <div class="m-actions">
-        <button class="btn-mp" id="emailBtn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-          Send Email
-        </button>
+        <button class="btn-mp" id="emailBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Send Email</button>
         <button class="btn-ms" id="closeContact2">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- ============================================================
-     NOTIFICATIONS MODAL
-============================================================ -->
+<!-- NOTIFICATIONS MODAL -->
 <div class="overlay" id="notifModal">
   <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-ttl">Notifications</div>
-      <button class="modal-x" id="closeNotif">&#x2715;</button>
-    </div>
+    <div class="modal-head"><div class="modal-ttl">Notifications</div><button class="modal-x" id="closeNotif">&#x2715;</button></div>
     <div class="modal-body">
       <div id="notifList"><div class="pd-empty">No notifications yet.</div></div>
       <button class="btn-ms" id="clearNotifBtn" style="width:100%;margin-top:12px;">Clear All</button>
@@ -608,21 +913,24 @@
   </div>
 </div>
 
-
-<!-- ============================================================
-     IMAGE LIGHTBOX
-============================================================ -->
+<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-card">
     <button class="lightbox-close" id="lightboxClose">&#x2715;</button>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    
+    <div class="lightbox-carousel-wrap">
+      <button class="lb-nav-btn prev" id="lbPrev" onclick="lbChange(-1)">&#10094;</button>
+      <img class="lightbox-img" id="lightboxImg" src="" alt="">
+      <button class="lb-nav-btn next" id="lbNext" onclick="lbChange(1)">&#10095;</button>
+      <div class="lb-dots" id="lbDots"></div>
+    </div>
+
     <div class="lightbox-footer">
       <div class="lightbox-caption" id="lightboxCaption"></div>
       <div class="lightbox-price" id="lightboxPrice"></div>
     </div>
   </div>
 </div>
-
 
 <script src="app.js"></script>
 </body>
