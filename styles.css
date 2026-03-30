@@ -4497,3 +4497,190 @@ y
   }
 }
 
+
+
+
+
+/* ============================================================
+   SELLER RATING SYSTEM
+============================================================ */
+
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+
+.rating-stars-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  line-height: 1;
+}
+
+.rating-avg {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.rating-count {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.trust-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.trust-pill.trust-high {
+  background: #d4edda;
+  color: #155724;
+}
+
+.trust-pill.trust-mid {
+  background: #d4edda;
+  color: #1e7e34;
+}
+
+.trust-pill.trust-mod {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.trust-pill.trust-low {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.no-rating {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+
+
+/* Profile dropdown rating */
+.pd-rating {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* Mobile profile rating */
+.mpp-rating {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Contact seller rating */
+.contact-seller-rating {
+  margin: 8px 0 4px;
+}
+
+/* Rating Modal */
+.rating-seller-info {
+  text-align: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rating-seller-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rating-seller-email {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.rating-stars-wrap {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.rating-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rating-stars .star {
+  font-size: 36px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s;
+  user-select: none;
+  line-height: 1;
+}
+
+.rating-stars .star:hover,
+.rating-stars .star.hover {
+  color: #f5c518;
+  transform: scale(1.15);
+}
+
+.rating-stars .star.active {
+  color: #f5a623;
+  transform: scale(1.1);
+}
+
+.rating-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  margin-top: 6px;
+  min-height: 18px;
+}
+
+/* Rate button in notification */
+.btn-notif-rate {
+  background: linear-gradient(135deg, #f5a623, #f7c948);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: "DM Sans", sans-serif;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.btn-notif-rate:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(245, 166, 35, 0.35);
+}
+
+.rated-label {
+  font-size: 11px;
+  color: #22a55a;
+  font-weight: 600;
+  margin-left: 8px;
+}
+

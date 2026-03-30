@@ -27,6 +27,7 @@ if (migrated) localStorage.setItem("products", JSON.stringify(products));
 
 let users         = JSON.parse(localStorage.getItem("registeredUsers")) || {};
 let notifications = JSON.parse(localStorage.getItem("notifications"))   || {};
+let ratings       = JSON.parse(localStorage.getItem("sellerRatings"))    || {};
 let currentUser   = null;
 let currentCat    = "all";
 let myItems       = false;
@@ -52,6 +53,7 @@ let fpExpireTimer = null;
 
 const save      = () => localStorage.setItem("products",      JSON.stringify(products));
 const saveNotif = () => localStorage.setItem("notifications", JSON.stringify(notifications));
+const saveRatings = () => localStorage.setItem("sellerRatings", JSON.stringify(ratings));
 
 const ICONS = {
   technology: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
@@ -913,7 +915,16 @@ function renderNotifList() {
            ${liked ? "Acknowledged" : "Acknowledge"}
          </button>`
       : "";
-    const notifIcon = n.isAck
+    const rateBtn = n.isRatingRequest && !n.rated
+      ? '<button class="btn-notif-rate" onclick="openRatingModal(\'' + (n.ratedSellerEmail || '').replace(/'/g, "\\'") + '\',\'' + (n.ratedSellerName || '').replace(/'/g, "\\'") + '\',' + n.id + ')">⭐ Rate Seller</button>'
+      : n.isRatingRequest && n.rated
+      ? '<span class="rated-label">✅ Rated</span>'
+      : "";
+    const notifIcon = n.isRatingReceived
+      ? "⭐"
+      : n.isRatingRequest
+      ? "⭐"
+      : n.isAck
       ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
       : "✉️";
     div.innerHTML =
@@ -921,7 +932,7 @@ function renderNotifList() {
       `<div class="notif-item-body">` +
         `<div class="notif-item-title">${n.title || "New Message"}</div>` +
         `<div class="notif-item-msg">${n.message}</div>` +
-        `<div class="notif-item-footer"><span class="notif-item-time">${timeAgo(n.time)}</span>${likeBtn}</div>` +
+        `<div class="notif-item-footer"><span class="notif-item-time">${timeAgo(n.time)}</span>${likeBtn}${rateBtn}</div>` +
       `</div>` +
       (n.unread ? `<div class="notif-dot"></div>` : "");
     list.appendChild(div);
@@ -1129,6 +1140,7 @@ function openMobileProfilePage() {
   set("mppSoldCount",   mine.filter(p => p.soldOut).length);
   set("mppAvailCount",  mine.filter(p => !p.soldOut).length);
   renderMobileProfileItems();
+  if (typeof renderRatingBadge === "function") renderRatingBadge(currentUser.email, "mppRating");
   $("mobileProfilePage").classList.remove("hidden");
   $("pageBody").style.display = "none";
   setMobileNavActive("mnProfile");
@@ -1182,8 +1194,15 @@ function renderAll() {
   renderProducts(currentCat, getSearchValue());
   renderRecent();
   if ($("profileDropdown").classList.contains("open")) renderPD();
-  if (mobileProfileOpen) renderMobileProfileItems();
+  if (mobileProfileOpen) {
+    renderMobileProfileItems();
+    if (typeof renderRatingBadge === "function") renderRatingBadge(currentUser.email, "mppRating");
+  }
   updateNotifBadge();
+  if (typeof renderRatingBadge === "function" && currentUser) {
+    renderRatingBadge(currentUser.email, "pdRating");
+    renderRatingBadge(currentUser.email, "avRating");
+  }
 }
 
 function getSearchValue() {
@@ -1270,6 +1289,7 @@ function openContact(id) {
   $("cEmail").textContent = p.email;
   $("cLoc").textContent   = p.location;
   $("cRole").innerHTML    = `<span class="role-b role-${p.role}">${p.role}</span>`;
+  if (typeof renderRatingBadge === "function") renderRatingBadge(p.email, "cRating");
   $("contactMessage").value = `Hi ${p.seller}! I'm interested in your "${p.name}" for ₱${p.price.toLocaleString()}. Is it still available?`;
   $("emailBtn").onclick = () => {
     const p2  = products.find(x => x.id === contactProductId);
@@ -1458,6 +1478,35 @@ function markSold(id) {
     products[i].soldOut     = true;
     products[i].soldOutTime = Date.now();
     save();
+
+    /* Send rating notification to all buyers who contacted about this item */
+    const sellerEmail = products[i].email;
+    const sellerName  = products[i].seller;
+    const itemName    = products[i].name;
+    const itemId      = products[i].id;
+
+    const sellerNotifs = notifications[sellerEmail] || [];
+    const buyerEmails  = [];
+    sellerNotifs.forEach(n => {
+      if (n.itemId === itemId && n.from && n.from !== sellerEmail && !buyerEmails.includes(n.from)) {
+        buyerEmails.push(n.from);
+      }
+    });
+
+    buyerEmails.forEach(buyerEmail => {
+      addNotification(buyerEmail, {
+        title:    "Rate your experience with " + sellerName,
+        message:  '"' + itemName + '" has been marked as sold! If you purchased this item, please rate the seller to help other buyers. ⭐',
+        from:     sellerEmail,
+        fromName: sellerName,
+        itemId:   itemId,
+        itemName: itemName,
+        isRatingRequest: true,
+        ratedSellerEmail: sellerEmail,
+        ratedSellerName:  sellerName,
+      });
+    });
+
     renderAll();
   }
 }
@@ -1721,12 +1770,160 @@ function showDashboard() {
 
   expiry();
   renderAll();
+  if (typeof renderRatingBadge === "function") {
+    renderRatingBadge(currentUser.email, "pdRating");
+    renderRatingBadge(currentUser.email, "avRating");
+  }
 }
+
+
+
+
+/* ============================================================
+   SELLER RATINGS SYSTEM
+============================================================ */
+
+let ratingValue     = 0;
+let ratingTargetEmail = "";
+let ratingTargetName  = "";
+let ratingNotifId     = 0;
+
+const RATING_LABELS = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
+
+function getSellerRating(email) {
+  const r = ratings[email];
+  if (!r || !r.length) return null;
+  const avg = r.reduce((sum, x) => sum + x.score, 0) / r.length;
+  return { avg: Math.round(avg * 10) / 10, count: r.length };
+}
+
+function getTrustLabel(avg) {
+  if (avg >= 4.5) return { label: "Highly Trusted", cls: "trust-high" };
+  if (avg >= 3.5) return { label: "Trusted", cls: "trust-mid" };
+  if (avg >= 2.5) return { label: "Moderate", cls: "trust-mod" };
+  return { label: "Low Trust", cls: "trust-low" };
+}
+
+function renderStarsHtml(avg, size) {
+  size = size || 14;
+  let html = "";
+  for (let i = 1; i <= 5; i++) {
+    const fill = i <= Math.round(avg) ? "#f5a623" : "#ddd";
+    html += '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="' + fill + '" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  }
+  return html;
+}
+
+function renderRatingBadge(email, targetId) {
+  const el = $(targetId);
+  if (!el) return;
+  const r = getSellerRating(email);
+  if (!r) {
+    el.innerHTML = '<span class="no-rating">No ratings yet</span>';
+    return;
+  }
+  const trust = getTrustLabel(r.avg);
+  el.innerHTML =
+    '<div class="rating-badge ' + trust.cls + '">' +
+      '<span class="rating-stars-small">' + renderStarsHtml(r.avg, 13) + '</span>' +
+      '<span class="rating-avg">' + r.avg + '</span>' +
+      '<span class="rating-count">(' + r.count + ')</span>' +
+      '<span class="trust-pill ' + trust.cls + '">' + trust.label + '</span>' +
+    '</div>';
+}
+
+function openRatingModal(sellerEmail, sellerName, notifId) {
+  ratingTargetEmail = sellerEmail;
+  ratingTargetName  = sellerName;
+  ratingNotifId     = notifId;
+  ratingValue       = 0;
+
+  const existing = (ratings[sellerEmail] || []).find(r => r.rater === currentUser.email && r.notifId === notifId);
+  if (existing) {
+    alert("You have already rated this seller for this transaction.");
+    return;
+  }
+
+  $("ratingSellerInfo").innerHTML =
+    '<div class="rating-seller-name">' + sellerName + '</div>' +
+    '<div class="rating-seller-email">' + sellerEmail + '</div>';
+  $("ratingText").textContent = "";
+  $("ratingComment").value = "";
+  $("submitRatingBtn").disabled = true;
+
+  document.querySelectorAll("#ratingStars .star").forEach(s => s.classList.remove("active"));
+  $("ratingModal").classList.add("open");
+}
+
+document.querySelectorAll("#ratingStars .star").forEach(star => {
+  star.addEventListener("click", function() {
+    ratingValue = parseInt(this.dataset.val);
+    document.querySelectorAll("#ratingStars .star").forEach((s, i) => {
+      s.classList.toggle("active", i < ratingValue);
+    });
+    $("ratingText").textContent = RATING_LABELS[ratingValue];
+    $("submitRatingBtn").disabled = false;
+  });
+
+  star.addEventListener("mouseenter", function() {
+    const val = parseInt(this.dataset.val);
+    document.querySelectorAll("#ratingStars .star").forEach((s, i) => {
+      s.classList.toggle("hover", i < val);
+    });
+  });
+
+  star.addEventListener("mouseleave", function() {
+    document.querySelectorAll("#ratingStars .star").forEach(s => s.classList.remove("hover"));
+  });
+});
+
+$("submitRatingBtn").addEventListener("click", function() {
+  if (!ratingValue || !ratingTargetEmail) return;
+
+  if (!ratings[ratingTargetEmail]) ratings[ratingTargetEmail] = [];
+  ratings[ratingTargetEmail].push({
+    rater:    currentUser.email,
+    raterName: currentUser.name,
+    score:    ratingValue,
+    comment:  $("ratingComment").value.trim(),
+    time:     Date.now(),
+    notifId:  ratingNotifId,
+  });
+  saveRatings();
+
+  const myNotifs = notifications[currentUser.email] || [];
+  const n = myNotifs.find(x => x.id === ratingNotifId);
+  if (n) {
+    n.rated = true;
+    saveNotif();
+  }
+
+  const r = getSellerRating(ratingTargetEmail);
+  const trust = getTrustLabel(r.avg);
+  addNotification(ratingTargetEmail, {
+    title:    currentUser.name + " rated you " + ratingValue + "/5 ⭐",
+    message:  "You received a " + RATING_LABELS[ratingValue].toLowerCase() + " rating! Your overall rating is now " + r.avg + "/5 (" + r.count + " reviews). You are \"" + trust.label + "\".",
+    from:     currentUser.email,
+    fromName: currentUser.name,
+    isRatingReceived: true,
+  });
+
+  $("ratingModal").classList.remove("open");
+  renderAll();
+  alert("Thank you for your rating!");
+});
+
+$("closeRating").addEventListener("click", () => $("ratingModal").classList.remove("open"));
+$("ratingModal").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("open"); });
+
+window.openRatingModal = openRatingModal;
 
 
 /* ============================================================
    INIT — auto-login if session saved
 ============================================================ */
+
+
 
 /* Check admin session first */
 if (localStorage.getItem("ps_admin_session") === "1") {

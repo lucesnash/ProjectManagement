@@ -764,13 +764,14 @@
           <div style="position:relative;" class="desktop-only">
             <div class="tb-avatar" id="profileToggle">
               <div class="av-circle" id="avInitials">U</div>
-              <div><div class="av-name" id="avName">User</div><div class="av-role" id="avRole">Member</div></div>
+              <div><div class="av-name" id="avName">User</div><div class="av-role" id="avRole">Member</div>
             </div>
             <div class="pd" id="profileDropdown">
               <div class="pd-head">
                 <div class="pd-name" id="pdName">User</div>
                 <div class="pd-email" id="pdEmail">user@ue.edu.ph</div>
                 <div class="pd-badge" id="pdRole">Member</div>
+                <div class="pd-rating" id="pdRating"></div>
               </div>
               <div class="pd-body">
                 <div class="pd-sec">My Listed Items</div>
@@ -811,6 +812,7 @@
           <div class="mpp-name" id="mppName">User</div>
           <div class="mpp-email" id="mppEmail">user@ue.edu.ph</div>
           <div class="mpp-badge" id="mppRole">Student</div>
+          <div class="mpp-rating" id="mppRating"></div>
         </div>
         <div class="mpp-actions">
           <button class="mpp-action-btn" id="mppSellBtn"><span class="mpp-action-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="mpp-action-label">New Listing</span></button>
@@ -831,6 +833,7 @@
     </div>
 
     <nav class="mobile-nav" id="mobileNav">
+      
       <button class="mn-item active" id="mnHome"><span class="mn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg></span><span class="mn-label">Home</span></button>
       <button class="mn-item" id="mnCategories"><span class="mn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="mn-label">Categories</span></button>
       <button class="mn-item" id="mnProfile"><span class="mn-icon" style="position:relative;display:inline-flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="mn-notif-dot" id="mnNotifDot"></span></span><span class="mn-label">Profile</span></button>
@@ -890,6 +893,7 @@
     <div class="modal-body">
       <div class="seller-block">
         <p><strong>Seller:</strong> <span id="cName"></span><span id="cRole"></span></p>
+        <div class="contact-seller-rating" id="cRating"></div>
         <p><strong>Email:</strong> <span id="cEmail"></span></p>
         <p><strong>Location:</strong> <span id="cLoc"></span></p>
       </div>
@@ -928,6 +932,36 @@
     <div class="lightbox-footer">
       <div class="lightbox-caption" id="lightboxCaption"></div>
       <div class="lightbox-price" id="lightboxPrice"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- RATING MODAL -->
+<div class="overlay" id="ratingModal">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-head">
+      <div class="modal-ttl">Rate the Seller</div>
+      <button class="modal-x" id="closeRating">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="rating-seller-info" id="ratingSellerInfo"></div>
+      <div class="rating-stars-wrap">
+        <div class="rating-label">How was your experience?</div>
+        <div class="rating-stars" id="ratingStars">
+          <span class="star" data-val="1">&#9733;</span>
+          <span class="star" data-val="2">&#9733;</span>
+          <span class="star" data-val="3">&#9733;</span>
+          <span class="star" data-val="4">&#9733;</span>
+          <span class="star" data-val="5">&#9733;</span>
+        </div>
+        <div class="rating-text" id="ratingText"></div>
+      </div>
+      <div class="f">
+        <label>Leave a comment (optional)</label>
+        <textarea id="ratingComment" rows="2" placeholder="How was the transaction?"></textarea>
+      </div>
+      <button class="btn-mp" id="submitRatingBtn" style="width:100%;margin-top:8px;" disabled>Submit Rating</button>
     </div>
   </div>
 </div>
